@@ -1,4 +1,10 @@
---odzhi.cc ui lib modified nhack v2 lib
+--[[
+    lira_uilib.lua
+    lira.xyz UI Library
+    Style: Gamesense / Skeet (dark amber)
+    Built for Project Delta
+]]
+
 if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
     getgenv().LiraLibrary:Exit()
 end
@@ -283,8 +289,7 @@ do
             Self.UnusedHolder.Instance:Destroy()
         end
 
-        Library = nil
-        getgenv().Library = nil
+        getgenv().LiraLibrary = nil
     end
 
     Library.Create = function(Self, Class, Properties)
