@@ -1,10 +1,3 @@
---[[
-    lira_uilib.lua
-    lira.xyz UI Library
-    Style: Gamesense / Skeet (dark amber)
-    Built for Project Delta
-]]
-
 if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
     getgenv().LiraLibrary:Exit()
 end
@@ -2861,8 +2854,7 @@ do
                 WatermarkFps += 1
 
                 if CurrentTick - WatermarkLastShimmerTime >= (1 / 30) then
-                    WatermarkShimmerPhase = 0 --
-                        1
+                    WatermarkShimmerPhase = 0
                     WatermarkLastShimmerTime = CurrentTick
                     if DynamicTextProvider and (CurrentTick - DynamicTextTick) >= 0.25 then
                         DynamicTextTick = CurrentTick
