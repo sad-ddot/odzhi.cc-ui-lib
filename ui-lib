@@ -4363,7 +4363,7 @@ do
                     Name = "\0",
                     Parent = Library.Holder.Instance,
                     Position = UDim2.new(0.4242021143436432, 0, 0.7932242751121521, 0),
-                    Size = UDim2.new(0, 256, 0, 100),
+                    Size = UDim2.new(0, 256, 0, 110),
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Background"]
                 }):AddToTheme({ BackgroundColor3 = 'Background' })
@@ -4512,12 +4512,13 @@ do
                     TextColor3 = Library.Theme["Accent"],
                     Text = "",
                     AnchorPoint = Vector2.new(0, 1),
-                    Position = UDim2.new(0, 80, 1, -22),
+                    Position = UDim2.new(0, 80, 1, -36),
                     Size = UDim2.new(1, -90, 0, 13),
                     BackgroundTransparency = 1,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     BorderSizePixel = 0,
                     TextTruncate = Enum.TextTruncate.AtEnd,
+                    ZIndex = 5,
                     Visible = false
                 }):AddToTheme({ TextColor3 = "Accent" })
 
@@ -4642,26 +4643,6 @@ do
             Library:RegisterLayout("TargetIndicator", {
                 Instance = Items["TargetIndicator"].Instance
             })
-
-            do
-                local glowStroke = Items["GlowStroke"].Instance
-                local glowPhase  = 0
-                local glowConn   = game:GetService("RunService").Heartbeat:Connect(function(dt)
-                    if not Items["TargetIndicator"].Instance.Visible then return end
-                    glowPhase = (glowPhase + dt * 1.8) % (math.pi * 2)
-                    local t = (math.sin(glowPhase) + 1) / 2
-                    local alpha = 0.55 + 0.45 * t
-                    glowStroke.Color = Color3.fromRGB(
-                        math.floor(220 * alpha + 60 * (1 - alpha)),
-                        math.floor(140 * alpha + 30 * (1 - alpha)),
-                        math.floor(40  * alpha + 8  * (1 - alpha))
-                    )
-                    glowStroke.Thickness = 1 + t * 0.8
-                end)
-                Library:Connect(Items["TargetIndicator"].Instance.AncestryChanged, function(_, p)
-                    if p == nil then glowConn:Disconnect() end
-                end)
-            end
 
             Indicator:Center()
 
