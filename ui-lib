@@ -1,3 +1,10 @@
+--[[
+    lira_uilib.lua
+    lira.xyz UI Library
+    Style: Gamesense / Skeet (dark amber)
+    Built for Project Delta
+]]
+
 if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
     getgenv().LiraLibrary:Exit()
 end
@@ -2711,6 +2718,7 @@ do
         end
 
         Library.Watermark = function(Self, Params)
+            Params = Params or {}
             local Watermark = {}
             local PrefixText = tostring((Params and Params.Name) or "lira.xyz")
             local WatermarkTick = tick()
@@ -2903,6 +2911,7 @@ do
         end
 
         Library.KeybindList = function(Self, Params)
+            Params = Params or {}
             local KeybindList = {}
             Library.KeyList = KeybindList
 
@@ -2943,7 +2952,7 @@ do
                     TextSize = Library.FontSize,
                     Parent = Items["KeybindList"].Instance,
                     TextColor3 = Library.Theme["Text"],
-                    Text = Params.Name,
+                    Text = tostring(Params.Name or "Binds"),
                     BackgroundTransparency = 1,
                     Size = UDim2.new(0, 0, 0, 15),
                     BorderSizePixel = 0,
@@ -3241,7 +3250,7 @@ do
                     TextSize = Library.FontSize,
                     Parent = Items["ESPPreview"].Instance,
                     TextColor3 = Library.Theme["Accent"],
-                    Text = Params.Name,
+                    Text = tostring(Params.Name or Params.name or ""),
                     Size = UDim2.new(0, 0, 0, 15),
                     Position = UDim2.new(0, 10, 0, 6),
                     BackgroundTransparency = 1,
@@ -3475,6 +3484,7 @@ do
         end
 
         Library.ModeratorList = function(Self, Params)
+            Params = Params or {}
             local ModeratorList = {
                 Entries = {}
             }
@@ -3545,7 +3555,7 @@ do
                     TextSize = Library.FontSize,
                     Parent = Items["ModeratorList"].Instance,
                     TextColor3 = Library.Theme["Accent"],
-                    Text = Params.Name,
+                    Text = tostring(Params.Name or Params.name or ""),
                     Size = UDim2.new(0, 0, 0, 15),
                     Position = UDim2.new(0, 10, 0, 6),
                     BackgroundTransparency = 1,
@@ -3821,7 +3831,7 @@ do
                     TextSize = Library.FontSize,
                     Parent = Items["CallLogger"].Instance,
                     TextColor3 = Library.Theme["Accent"],
-                    Text = Params.Name,
+                    Text = tostring(Params.Name or Params.name or ""),
                     Size = UDim2.new(0, 0, 0, 15),
                     Position = UDim2.new(0, 10, 0, 6),
                     BackgroundTransparency = 1,
@@ -4113,7 +4123,7 @@ do
                     TextSize = Library.FontSize,
                     Parent = Items["RadarWidget"].Instance,
                     TextColor3 = Library.Theme["Accent"],
-                    Text = Params.Name or "Radar",
+                    Text = tostring(Params.Name or Params.name or "Radar"),
                     Size = UDim2.new(0, 0, 0, 15),
                     Position = UDim2.new(0, 10, 0, 6),
                     BackgroundTransparency = 1,
@@ -4607,6 +4617,7 @@ do
         end
 
         Library.ChargeShotWidget = function(Self, Params)
+            Params = Params or {}
             local Widget = {
                 Visible = false,
                 Minimum = 1,
@@ -4796,6 +4807,7 @@ do
         end
 
         Library.StatListWidget = function(Self, Params)
+            Params = Params or {}
             local Widget = {
                 Visible = true,
                 MinimumSize = Vector2.new(208, 102),
@@ -4933,6 +4945,7 @@ do
         end
 
         Library.InventoryViewer = function(Self, Params)
+            Params = Params or {}
             local Viewer = {
                 Visible = true,
                 Entries = {},
@@ -6997,7 +7010,7 @@ do
                     TextSize = Library.FontSize,
                     Parent = Items["Playerlist"].Instance,
                     TextColor3 = Library.Theme["Accent"],
-                    Text = Params.Name,
+                    Text = tostring(Params.Name or Params.name or ""),
                     Size = UDim2.new(0, 0, 0, 15),
                     Position = UDim2.new(0, 10, 0, 6),
                     BackgroundTransparency = 1,
