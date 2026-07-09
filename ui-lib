@@ -3105,7 +3105,7 @@ do
                     Position = UDim2.new(0, -8, 0, 0),
                     Size = UDim2.new(0, 1, 1, 0),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = Color
+                    BackgroundColor3 = typeof(Color)=="Color3" and Color or Library.Theme["Accent"]
                 })
 
                 Items["Text"] = Library:Create("TextLabel", {
@@ -3149,7 +3149,9 @@ do
             local Info = TweenInfo.new(0.85, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out, 0, false, 0)
 
             Library:Thread(function()
+                pcall(function()
                 for Index, Value in Items do
+                    if not pcall(function() return Value.Instance end) then continue end
                     if Value.Instance:IsA("Frame") then
                         Value:Tween({ BackgroundTransparency = 0 }, Info)
                     elseif Value.Instance:IsA("TextLabel") then
@@ -3158,6 +3160,7 @@ do
                         Value:Tween({ Transparency = 0 }, Info)
                     end
                 end
+                end)
 
                 Items["Notification"]:Tween({ Size = UDim2.new(0, Size.X, 0, Size.Y) }, Info)
 
@@ -3174,7 +3177,7 @@ do
 
                     Items["Notification"]:Tween({ Size = UDim2.new(0, 0, 0, Size.Y) }, Info)
                     task.wait(0.5)
-                    Items["Notification"].Instance:Destroy()
+                    pcall(function() Items["Notification"].Instance:Destroy() end)
                 end)
             end)
         end
@@ -4543,7 +4546,7 @@ do
             end
 
             function Indicator:SetTarget(Target)
-                Indicator:ResetConnection()
+                pcall(function() Indicator:ResetConnection() end)
 
                 if not Target then
                     Items["Name"].Instance.Text = "No target selected"
@@ -7904,6 +7907,7 @@ do
             })
 
             UpdateDockState()
+            Items["DockOutline"].Instance.Visible = false
             Window:Center()
             return setmetatable(Window, Library)
         end
