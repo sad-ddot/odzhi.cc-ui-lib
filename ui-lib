@@ -1,3 +1,10 @@
+--[[
+    lira_uilib.lua
+    lira.xyz UI Library
+    Style: Gamesense / Skeet (dark amber)
+    Built for Project Delta
+]]
+
 if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
     getgenv().LiraLibrary:Exit()
 end
@@ -4534,7 +4541,7 @@ do
                     FontFace = Library.Font,
                     TextSize = Library.FontSize,
                     Parent = Items["TargetIndicator"].Instance,
-                    TextColor3 = Library.Theme["SubText"] or Library.Theme["Text"],
+                    TextColor3 = Library.Theme["Text"],
                     Text = "",
                     AnchorPoint = Vector2.new(0, 1),
                     Position = UDim2.new(0, 80, 1, -22),
@@ -4544,7 +4551,7 @@ do
                     BorderSizePixel = 0,
                     ZIndex = 5,
                     Visible = false
-                }):AddToTheme({ TextColor3 = "SubText" })
+                }):AddToTheme({ TextColor3 = "Text" })
             end
 
             local HealthConnection = nil
