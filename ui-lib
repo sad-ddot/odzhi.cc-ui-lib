@@ -1,3 +1,10 @@
+--[[
+    lira_uilib.lua
+    lira.xyz UI Library
+    Style: Gamesense / Skeet (dark amber)
+    Built for Project Delta
+]]
+
 if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
     getgenv().LiraLibrary:Exit()
 end
@@ -1033,8 +1040,9 @@ do
     end
 
     Library.Round = function(Self, Number, Float)
-        local Multiplier = 1 / (Float or 1)
-        return math.floor(Number * Multiplier) / Multiplier
+        local f = (Float and Float > 0) and Float or 1
+        local Multiplier = 1 / f
+        return math.floor(Number * Multiplier + 0.5) / Multiplier
     end
 
     Library.RegisterLayout = function(Self, Id, Data)
