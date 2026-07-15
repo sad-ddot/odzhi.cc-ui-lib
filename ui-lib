@@ -1,10 +1,3 @@
---[[
-    lira_uilib.lua
-    lira.xyz UI Library
-    Style: Gamesense / Skeet (dark amber)
-    Built for Project Delta
-]]
-
 if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
     getgenv().LiraLibrary:Exit()
 end
@@ -4539,13 +4532,11 @@ do
                 Items["DistanceLabel"] = Library:Create("TextLabel", {
                     Name = "\0",
                     FontFace = Library.Font,
-                    TextSize = Library.FontSize,
-                    Parent = Items["TargetIndicator"].Instance,
+                    TextSize = Library.FontSize - 1,
+                    Parent = Items["Stuff"].Instance,
                     TextColor3 = Library.Theme["Text"],
                     Text = "",
-                    AnchorPoint = Vector2.new(0, 1),
-                    Position = UDim2.new(0, 80, 1, -22),
-                    Size = UDim2.new(1, -90, 0, 13),
+                    Size = UDim2.new(1, -90, 0, 14),
                     BackgroundTransparency = 1,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     BorderSizePixel = 0,
@@ -4656,7 +4647,7 @@ do
             function Indicator:SetWeapon(WeaponName)
                 local lbl = Items["WeaponLabel"].Instance
                 if WeaponName and WeaponName ~= "" and WeaponName ~= "None" then
-                    lbl.Text = "\xE2\x9C\xA6 " .. tostring(WeaponName)
+                    lbl.Text = "Holding: " .. tostring(WeaponName)
                     lbl.TextColor3 = Library.Theme["Accent"]
                     lbl.Visible = true
                 else
@@ -4669,7 +4660,7 @@ do
                 if not Items["DistanceLabel"] then return end
                 local lbl = Items["DistanceLabel"].Instance
                 if Dist and Dist > 0 then
-                    lbl.Text = "\xF0\x9F\x93\x8F " .. tostring(Dist) .. "m"
+                    lbl.Text = "Distance: " .. tostring(Dist) .. "m"
                     lbl.Visible = true
                 else
                     lbl.Text = ""
