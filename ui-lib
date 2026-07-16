@@ -4740,7 +4740,7 @@ do
                     Name = "\0",
                     Parent = Library.Holder.Instance,
                     Position = UDim2.new(0.4242021143436432, 0, 0.7932242751121521, 0),
-                    Size = UDim2.new(0, 256, 0, 110),
+                    Size = UDim2.new(0, 270, 0, 130),
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Background"]
                 }):AddToTheme({ BackgroundColor3 = 'Background' })
@@ -4837,10 +4837,9 @@ do
                     Parent = Items["Stuff"].Instance,
                     TextColor3 = Library.Theme["Text"],
                     Text = "sametexe009",
-                    Size = UDim2.new(1, -90, 0, 15),
+                    Size = UDim2.new(1, -10, 0, 15),
                     BackgroundTransparency = 1,
                     TextXAlignment = Enum.TextXAlignment.Left,
-                    Position = UDim2.new(0, 80, 0, 10),
                     BorderSizePixel = 0
                 }):AddToTheme({ TextColor3 = 'Text' })
 
@@ -4981,10 +4980,9 @@ do
                     Parent = Items["Stuff"].Instance,
                     TextColor3 = Library.Theme["Text"],
                     Text = Text,
-                    Size = UDim2.new(1, -90, 0, 15),
+                    Size = UDim2.new(1, -10, 0, 14),
                     BackgroundTransparency = 1,
                     TextXAlignment = Enum.TextXAlignment.Left,
-                    Position = UDim2.new(0, 80, 0, 24),
                     BorderSizePixel = 0
                 }):AddToTheme({ TextColor3 = 'Text' })
             end
