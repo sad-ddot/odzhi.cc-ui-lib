@@ -1174,6 +1174,324 @@ do
         })
     end
 
+    Library.SaveConfig = function(Self, ConfigName)
+        ConfigName = tostring(ConfigName or "default")
+        local Data = Library:GetConfig()
+        if not Data then return false end
+        local Path = Library.Directory .. Library.Folders.Configs .. "/" .. ConfigName .. ".json"
+        local Success, Err = pcall(function() writefile(Path, Data) end)
+        return Success
+    end
+
+    Library.DeleteConfig = function(Self, ConfigName)
+        ConfigName = tostring(ConfigName or "default")
+        local Path = Library.Directory .. Library.Folders.Configs .. "/" .. ConfigName .. ".json"
+        if isfile and isfile(Path) then
+            pcall(function() delfile(Path) end)
+        end
+    end
+
+    Library.GetConfigs = function(Self)
+        local Path = Library.Directory .. Library.Folders.Configs
+        local list = {}
+        if listfiles then
+            local ok, files = pcall(listfiles, Path)
+            if ok and files then
+                for _, f in ipairs(files) do
+                    local name = f:match("([^/\\]+)%.json$")
+                    if name then table.insert(list, name) end
+                end
+            end
+        end
+        return list
+    end
+
+    Library.SetThemeAccent = function(Self, R, G, B)
+        Library.Theme["Accent"] = Color3.fromRGB(R, G, B)
+        for _, reg in ipairs(Library.ThemeMap or {}) do
+            pcall(function() reg.Instance[reg.Property] = Library.Theme[reg.ThemeKey] end)
+        end
+    end
+
+    Library.SetScale = function(Self, Scale)
+        local mf = Library.MainWindowFrame
+        if mf and UDim2 and typeof then
+            local s = tonumber(Scale) or 1
+            local size = mf.Size
+            mf.Size = UDim2.new(size.X.Scale, size.X.Offset * s, size.Y.Scale, size.Y.Offset * s)
+        end
+    end
+
+    Library.SearchWindow = nil
+    Library.OpenSearch = function(Self)
+        if Library.SearchWindow and Library.SearchWindow.Instance and Library.SearchWindow.Instance.Parent then
+            Library.SearchWindow:Toggle()
+            return
+        end
+        local Win = Library.MainWindowFrame and Library.MainWindowFrame.Parent
+        if not Win then return end
+        local Frame = Library:Create("Frame", {
+            Name = "\0",
+            Parent = Win,
+            Position = Library.MainWindowFrame and UDim2.new(0, 0, 0, Library.MainWindowFrame.AbsoluteSize.Y + 6) or UDim2.new(0, 0, 0, 0),
+            Size = UDim2.new(1, 0, 0, 36),
+            BorderSizePixel = 0,
+            BackgroundColor3 = Library.Theme["Background"],
+            Visible = true
+        })
+        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = Frame.Instance
+        local Input = Library:Create("TextBox", {
+            Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
+            Parent = Frame.Instance,
+            PlaceholderText = "search elements...",
+            PlaceholderColor3 = Library.Theme["Inactive Text"],
+            Text = "", TextColor3 = Library.Theme["Text"],
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, -16, 1, 0),
+            Position = UDim2.new(0, 8, 0, 0),
+            TextXAlignment = Enum.TextXAlignment.Left,
+            ClearTextOnFocus = false, BorderSizePixel = 0
+        })
+        function Frame:Toggle()
+            self.Instance.Visible = not self.Instance.Visible
+        end
+        function Frame:Close()
+            self.Instance:Destroy()
+            Library.SearchWindow = nil
+        end
+        Library.SearchWindow = Frame
+
+        Input:GetPropertyChangedSignal("Text"):Connect(function()
+            local q = string.lower(Input.Text or "")
+            for _, page in ipairs(Library.Pages and {} or {}) do end
+            if Library.Pages and Library.Pages[1] then
+                for _, page in ipairs(Library.Pages) do
+                    if page and page.Items and page.Items.Page then
+                        for _, sub in (page.SubPages or {}) do
+                            if sub and sub.Items and sub.Items.LeftColumn then
+                                for _, child in ipairs(sub.Items.LeftColumn.Instance:GetDescendants()) do
+                                    if child:IsA("TextLabel") and child.Text and child.Text ~= "" then
+                                        local match = q == "" or string.find(string.lower(child.Text), q, 1, true)
+                                        if child.Parent and child.Parent.Parent then
+                                            pcall(function()
+                                                if match then
+                                                    child.Visible = true
+                                                    if child.Parent then child.Parent.Visible = true end
+                                                else
+                                                    local hasMatch = false
+                                                    if child.Parent and child.Parent:IsA("Frame") then
+                                                        for _, sib in ipairs(child.Parent:GetChildren()) do
+                                                            if sib:IsA("TextLabel") and sib ~= child and string.find(string.lower(sib.Text or ""), q, 1, true) then
+                                                                hasMatch = true; break
+                                                            end
+                                                        end
+                                                    end
+                                                    child.Visible = hasMatch or q == ""
+                                                end
+                                            end)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+
+    Library.SettingsWindow = nil
+    Library.OpenSettings = function(Self)
+        if Library.SettingsWindow and Library.SettingsWindow.Instance and Library.SettingsWindow.Instance.Parent then
+            Library.SettingsWindow:Toggle()
+            return
+        end
+        local Win = Library.MainWindowFrame and Library.MainWindowFrame.Parent
+        if not Win then return end
+        local Frame = Library:Create("Frame", {
+            Name = "\0",
+            Parent = Win,
+            AnchorPoint = Vector2.new(1, 0),
+            Position = UDim2.new(1, 6, 0, 0),
+            Size = UDim2.new(0, 220, 0, 140),
+            BorderSizePixel = 0,
+            BackgroundColor3 = Library.Theme["Background"],
+            Visible = true
+        })
+        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = Frame.Instance
+        local stroke = Instance.new("UIStroke"); stroke.Color = Library.Theme["Outline"]; stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; stroke.Parent = Frame.Instance
+        local Title = Library:Create("TextLabel", {
+            Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
+            Parent = Frame.Instance,
+            Text = "Menu Settings", TextColor3 = Library.Theme["Text"],
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, -16, 0, 14),
+            Position = UDim2.new(0, 8, 0, 6),
+            TextXAlignment = Enum.TextXAlignment.Left, BorderSizePixel = 0
+        })
+        local AccentLabel = Library:Create("TextLabel", {
+            Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
+            Parent = Frame.Instance,
+            Text = "Accent", TextColor3 = Library.Theme["Inactive Text"],
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, -16, 0, 12),
+            Position = UDim2.new(0, 8, 0, 30),
+            TextXAlignment = Enum.TextXAlignment.Left, BorderSizePixel = 0
+        })
+        local Palette = Library:Create("Frame", {
+            Name = "\0", Parent = Frame.Instance,
+            Size = UDim2.new(1, -16, 0, 18),
+            Position = UDim2.new(0, 8, 0, 46),
+            BorderSizePixel = 0, BackgroundColor3 = Library.Theme["Section"]
+        })
+        local pc = Instance.new("UICorner"); pc.CornerRadius = UDim.new(0, 4); pc.Parent = Palette.Instance
+        local Layout = Instance.new("UIListLayout")
+        Layout.FillDirection = Enum.FillDirection.Horizontal
+        Layout.Padding = UDim.new(0, 4)
+        Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        Layout.Parent = Palette.Instance
+        local colors = {
+            {255, 145, 50}, {230, 90, 90}, {90, 200, 255}, {80, 220, 130},
+            {200, 130, 255}, {255, 200, 80}, {255, 255, 255}, {30, 30, 36}
+        }
+        for _, c in ipairs(colors) do
+            local sw = Library:Create("TextButton", {
+                Name = "\0", Parent = Palette.Instance,
+                Size = UDim2.new(0, 16, 0, 12),
+                BackgroundColor3 = Color3.fromRGB(c[1], c[2], c[3]),
+                Text = "", AutoButtonColor = false, BorderSizePixel = 0
+            })
+            local sc = Instance.new("UICorner"); sc.CornerRadius = UDim.new(0, 3); sc.Parent = sw.Instance
+            sw.Instance.MouseButton1Click:Connect(function()
+                Library:SetThemeAccent(c[1], c[2], c[3])
+            end)
+        end
+        local AccentPicker = Library:Create("TextButton", {
+            Name = "\0", Parent = Frame.Instance,
+            Size = UDim2.new(1, -16, 0, 20),
+            Position = UDim2.new(0, 8, 0, 72),
+            BackgroundColor3 = Library.Theme["Section"],
+            Text = "reset to default",
+            TextColor3 = Library.Theme["Text"],
+            FontFace = Library.Font, TextSize = Library.FontSize,
+            AutoButtonColor = false, BorderSizePixel = 0
+        })
+        local apc = Instance.new("UICorner"); apc.CornerRadius = UDim.new(0, 4); apc.Parent = AccentPicker.Instance
+        AccentPicker.Instance.MouseButton1Click:Connect(function()
+            Library:SetThemeAccent(255, 145, 50)
+        end)
+        local CloseBtn = Library:Create("TextButton", {
+            Name = "\0", Parent = Frame.Instance,
+            Size = UDim2.new(1, -16, 0, 20),
+            Position = UDim2.new(0, 8, 0, 100),
+            BackgroundColor3 = Library.Theme["Section"],
+            Text = "close", TextColor3 = Library.Theme["Text"],
+            FontFace = Library.Font, TextSize = Library.FontSize,
+            AutoButtonColor = false, BorderSizePixel = 0
+        })
+        local cbc = Instance.new("UICorner"); cbc.CornerRadius = UDim.new(0, 4); cbc.Parent = CloseBtn.Instance
+        function Frame:Toggle() self.Instance.Visible = not self.Instance.Visible end
+        function Frame:Close() self.Instance:Destroy(); Library.SettingsWindow = nil end
+        CloseBtn.Instance.MouseButton1Click:Connect(function() Frame:Close() end)
+        Library.SettingsWindow = Frame
+    end
+
+    Library.ConfigWindow = nil
+    Library.OpenConfig = function(Self)
+        if Library.ConfigWindow and Library.ConfigWindow.Instance and Library.ConfigWindow.Instance.Parent then
+            Library.ConfigWindow:Toggle(); return
+        end
+        local Win = Library.MainWindowFrame and Library.MainWindowFrame.Parent
+        if not Win then return end
+        local Frame = Library:Create("Frame", {
+            Name = "\0",
+            Parent = Win,
+            AnchorPoint = Vector2.new(1, 0),
+            Position = UDim2.new(1, 6, 0, 0),
+            Size = UDim2.new(0, 240, 0, 220),
+            BorderSizePixel = 0,
+            BackgroundColor3 = Library.Theme["Background"],
+            Visible = true
+        })
+        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = Frame.Instance
+        local stroke = Instance.new("UIStroke"); stroke.Color = Library.Theme["Outline"]; stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; stroke.Parent = Frame.Instance
+        local Title = Library:Create("TextLabel", {
+            Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
+            Parent = Frame.Instance,
+            Text = "Configs", TextColor3 = Library.Theme["Text"],
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, -16, 0, 14),
+            Position = UDim2.new(0, 8, 0, 6),
+            TextXAlignment = Enum.TextXAlignment.Left, BorderSizePixel = 0
+        })
+        local List = Library:Create("ScrollingFrame", {
+            Name = "\0", Parent = Frame.Instance,
+            BackgroundColor3 = Library.Theme["Section"],
+            Position = UDim2.new(0, 8, 0, 26),
+            Size = UDim2.new(1, -16, 0, 130),
+            ScrollBarThickness = 2,
+            BorderSizePixel = 0, CanvasSize = UDim2.new(0, 0, 0, 0),
+            AutomaticCanvasSize = Enum.AutomaticSize.Y
+        })
+        local lc = Instance.new("UICorner"); lc.CornerRadius = UDim.new(0, 4); lc.Parent = List.Instance
+        local Layout = Instance.new("UIListLayout"); Layout.Padding = UDim.new(0, 3); Layout.Parent = List.Instance
+        local function refresh()
+            for _, c in ipairs(List.Instance:GetChildren()) do
+                if c:IsA("TextButton") then c:Destroy() end
+            end
+            local cfgs = Library:GetConfigs()
+            for _, name in ipairs(cfgs) do
+                local row = Library:Create("TextButton", {
+                    Name = "\0", Parent = List.Instance,
+                    Size = UDim2.new(1, -8, 0, 22),
+                    BackgroundColor3 = Library.Theme["Element"],
+                    Text = "  " .. name,
+                    TextColor3 = Library.Theme["Text"],
+                    FontFace = Library.Font, TextSize = Library.FontSize,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    AutoButtonColor = false, BorderSizePixel = 0
+                })
+                local rc = Instance.new("UICorner"); rc.CornerRadius = UDim.new(0, 3); rc.Parent = row.Instance
+                row.Instance.MouseButton1Click:Connect(function()
+                    local path = Library.Directory .. Library.Folders.Configs .. "/" .. name .. ".json"
+                    local ok, data = pcall(function() return readfile(path) end)
+                    if ok then pcall(function() Library:LoadConfig(data) end) end
+                    Frame:Close()
+                end)
+            end
+        end
+        local SaveBtn = Library:Create("TextButton", {
+            Name = "\0", Parent = Frame.Instance,
+            Size = UDim2.new(1, -16, 0, 20),
+            Position = UDim2.new(0, 8, 0, 162),
+            BackgroundColor3 = Library.Theme["Accent"],
+            Text = "save current", TextColor3 = Library.Theme["Background"],
+            FontFace = Library.Font, TextSize = Library.FontSize,
+            AutoButtonColor = false, BorderSizePixel = 0
+        })
+        local sbc = Instance.new("UICorner"); sbc.CornerRadius = UDim.new(0, 4); sbc.Parent = SaveBtn.Instance
+        SaveBtn.Instance.MouseButton1Click:Connect(function()
+            pcall(function() Library:SaveConfig("default") end)
+            pcall(function() Library:Notify("Saved default", 3) end)
+            refresh()
+        end)
+        local CloseBtn = Library:Create("TextButton", {
+            Name = "\0", Parent = Frame.Instance,
+            Size = UDim2.new(1, -16, 0, 20),
+            Position = UDim2.new(0, 8, 0, 188),
+            BackgroundColor3 = Library.Theme["Section"],
+            Text = "close", TextColor3 = Library.Theme["Text"],
+            FontFace = Library.Font, TextSize = Library.FontSize,
+            AutoButtonColor = false, BorderSizePixel = 0
+        })
+        local cbc = Instance.new("UICorner"); cbc.CornerRadius = UDim.new(0, 4); cbc.Parent = CloseBtn.Instance
+        function Frame:Toggle() self.Instance.Visible = not self.Instance.Visible end
+        function Frame:Close() self.Instance:Destroy(); Library.ConfigWindow = nil end
+        CloseBtn.Instance.MouseButton1Click:Connect(function() Frame:Close() end)
+        Library.ConfigWindow = Frame
+        refresh()
+    end
+
     Library.LoadConfig = function(Self, Config)
         local Decoded = HttpService:JSONDecode(Config)
         local FlagData = type(Decoded) == "table" and Decoded.Flags or Decoded
@@ -1515,7 +1833,7 @@ do
 
                 do
                     local _cpwCorner = Instance.new("UICorner")
-                    _cpwCorner.CornerRadius = UDim.new(0, 10)
+                    _cpwCorner.CornerRadius = UDim.new(0, 6)
                     _cpwCorner.Parent = Items["ColorpickerWindow"].Instance
                 end
 
@@ -2382,7 +2700,7 @@ do
 
                 do
                     local _kbwCorner = Instance.new("UICorner")
-                    _kbwCorner.CornerRadius = UDim.new(0, 10)
+                    _kbwCorner.CornerRadius = UDim.new(0, 6)
                     _kbwCorner.Parent = Items["KeybindWindow"].Instance
                 end
 
@@ -2782,7 +3100,7 @@ do
 
                 do
                     local _wmCorner = Instance.new("UICorner")
-                    _wmCorner.CornerRadius = UDim.new(0, 8)
+                    _wmCorner.CornerRadius = UDim.new(0, 5)
                     _wmCorner.Parent = Items["Watermark"].Instance
                 end
 
@@ -2971,7 +3289,7 @@ do
 
                 do
                     local _kblCorner = Instance.new("UICorner")
-                    _kblCorner.CornerRadius = UDim.new(0, 8)
+                    _kblCorner.CornerRadius = UDim.new(0, 5)
                     _kblCorner.Parent = Items["KeybindList"].Instance
                 end
 
@@ -3123,7 +3441,7 @@ do
 
                 do
                     local _ntCorner = Instance.new("UICorner")
-                    _ntCorner.CornerRadius = UDim.new(0, 8)
+                    _ntCorner.CornerRadius = UDim.new(0, 5)
                     _ntCorner.Parent = Items["Notification"].Instance
                 end
 
@@ -4431,27 +4749,9 @@ do
 
                 do
                     local _tiCorner = Instance.new("UICorner")
-                    _tiCorner.CornerRadius = UDim.new(0, 10)
+                    _tiCorner.CornerRadius = UDim.new(0, 6)
                     _tiCorner.Parent = Items["TargetIndicator"].Instance
                 end
-
-                Items["GlowStroke"] = Library:Create("UIStroke", {
-                    Name = "\0",
-                    Parent = Items["TargetIndicator"].Instance,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    LineJoinMode = Enum.LineJoinMode.Miter,
-                    Color = Color3.fromRGB(220, 140, 40),
-                    Thickness = 1
-                })
-
-                Library:Create("UIStroke", {
-                    Name = "\0",
-                    Parent = Items["TargetIndicator"].Instance,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    LineJoinMode = Enum.LineJoinMode.Miter,
-                    Color = Color3.fromRGB(80, 50, 10),
-                    BorderOffset = UDim.new(0, 1)
-                })
 
                 Items["Avatar"] = Library:Create("ImageLabel", {
                     Name = "\0",
@@ -4465,26 +4765,9 @@ do
 
                 do
                     local _avCorner = Instance.new("UICorner")
-                    _avCorner.CornerRadius = UDim.new(0, 8)
+                    _avCorner.CornerRadius = UDim.new(0, 5)
                     _avCorner.Parent = Items["Avatar"].Instance
                 end
-
-                Library:Create("UIStroke", {
-                    Name = "\0",
-                    Parent = Items["Avatar"].Instance,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    LineJoinMode = Enum.LineJoinMode.Miter,
-                    Color = Library.Theme["Outline"]
-                }):AddToTheme({ Color = 'Outline' })
-
-                Library:Create("UIStroke", {
-                    Name = "\0",
-                    Parent = Items["Avatar"].Instance,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    LineJoinMode = Enum.LineJoinMode.Miter,
-                    Color = Library.Theme["Border"],
-                    BorderOffset = UDim.new(0, 1)
-                }):AddToTheme({ Color = 'Border' })
 
                 Items["Healthbar"] = Library:Create("Frame", {
                     Name = "\0",
@@ -4495,15 +4778,6 @@ do
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Section"]
                 }):AddToTheme({ BackgroundColor3 = 'Section' })
-
-                Library:Create("UIStroke", {
-                    Name = "\0",
-                    Parent = Items["Healthbar"].Instance,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    LineJoinMode = Enum.LineJoinMode.Miter,
-                    Color = Library.Theme["Border"],
-                    BorderOffset = UDim.new(0, 1)
-                }):AddToTheme({ Color = 'Border' })
 
                 Items["HealthbarFill"] = Library:Create("Frame", {
                     Name = "\0",
@@ -4535,15 +4809,16 @@ do
                     LineJoinMode = Enum.LineJoinMode.Miter
                 })
 
-                Library:Create("UIGradient", {
-                    Name = "\0",
-                    Parent = Items["HealthbarFill"].Instance,
-                    Rotation = -90,
-                    Color = ColorSequence.new {
-                        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-                        ColorSequenceKeypoint.new(1, Color3.fromRGB(172, 172, 172))
-                    }
-                })
+                do
+                    local _hbCorner = Instance.new("UICorner")
+                    _hbCorner.CornerRadius = UDim.new(0, 3)
+                    _hbCorner.Parent = Items["Healthbar"].Instance
+                end
+                do
+                    local _hbfCorner = Instance.new("UICorner")
+                    _hbfCorner.CornerRadius = UDim.new(0, 3)
+                    _hbfCorner.Parent = Items["HealthbarFill"].Instance
+                end
 
                 Items["Stuff"] = Library:Create("Frame", {
                     Name = "\0",
@@ -5108,7 +5383,7 @@ do
 
                 do
                     local _ivCorner = Instance.new("UICorner")
-                    _ivCorner.CornerRadius = UDim.new(0, 10)
+                    _ivCorner.CornerRadius = UDim.new(0, 6)
                     _ivCorner.Parent = Items["InventoryViewer"].Instance
                 end
 
@@ -7524,7 +7799,7 @@ do
 
                 do
                     local _mfCorner = Instance.new("UICorner")
-                    _mfCorner.CornerRadius = UDim.new(0, 10)
+                    _mfCorner.CornerRadius = UDim.new(0, 6)
                     _mfCorner.Parent = Items["MainFrame"].Instance
                 end
 
@@ -7813,7 +8088,7 @@ do
 
                 do
                     local _poCorner = Instance.new("UICorner")
-                    _poCorner.CornerRadius = UDim.new(0, 10)
+                    _poCorner.CornerRadius = UDim.new(0, 6)
                     _poCorner.Parent = Items["PagesOutline"].Instance
                 end
 
@@ -7883,7 +8158,7 @@ do
 
                 do
                     local _coCorner = Instance.new("UICorner")
-                    _coCorner.CornerRadius = UDim.new(0, 10)
+                    _coCorner.CornerRadius = UDim.new(0, 6)
                     _coCorner.Parent = Items["ContentOutline"].Instance
                 end
 
@@ -7906,6 +8181,34 @@ do
 
                 Window.Items = Items
                 Library.MainWindowFrame = Items["MainFrame"].Instance
+
+                do
+                    local function makeIconBtn(asset, name, onClick)
+                        local b = Library:Create("ImageButton", {
+                            Name = "\0",
+                            Parent = Items["HeaderButtonHolder"].Instance,
+                            Image = asset,
+                            ImageColor3 = Library.Theme["Inactive Text"],
+                            BackgroundTransparency = 1,
+                            AutoButtonColor = false,
+                            Size = UDim2.new(0, 16, 0, 16),
+                            BorderSizePixel = 0
+                        })
+                        b:AddToTheme({ ImageColor3 = "Inactive Text" })
+                        b:OnHover(function()
+                            b:Tween({ ImageColor3 = Library.Theme["Text"] })
+                        end, function()
+                            b:Tween({ ImageColor3 = Library.Theme["Inactive Text"] })
+                        end)
+                        Library:Connect(b.MouseButton1Click, onClick)
+                        return b
+                    end
+
+                    Items["SearchBtn"]   = makeIconBtn("rbxassetid://15999597350",  "search",   function() pcall(function() Library:OpenSearch() end) end)
+                    Items["ConfigBtn"]   = makeIconBtn("rbxassetid://129261498595427", "config",   function() pcall(function() Library:OpenConfig() end) end)
+                    Items["SaveBtn"]     = makeIconBtn("rbxassetid://12403099678", "save",     function() pcall(function() Library:SaveConfig("default") end) pcall(function() Library:Notify("Saved default", 3) end) end)
+                    Items["SettingsBtn"] = makeIconBtn("rbxassetid://129261498595427", "settings", function() pcall(function() Library:OpenSettings() end) end)
+                end
             end
 
             local Debounce = false
@@ -8523,7 +8826,7 @@ do
                     local _so = Items["SectionOutline"].Instance
                     local _sc = Items["Section"].Instance
                     local _oCorner = Instance.new("UICorner")
-                    _oCorner.CornerRadius = UDim.new(0, 8)
+                    _oCorner.CornerRadius = UDim.new(0, 5)
                     _oCorner.Parent = _so
                     local _sCorner = Instance.new("UICorner")
                     _sCorner.CornerRadius = UDim.new(0, 7)
@@ -8577,7 +8880,7 @@ do
                     AutoButtonColor = false,
                     BackgroundTransparency = 1,
                     Position = UDim2.new(0, -ToggleButtonOffset, 0, 0),
-                    Size = UDim2.new(1, ToggleButtonOffset, 0, 12),
+                    Size = UDim2.new(1, ToggleButtonOffset, 0, 20),
                     BorderSizePixel = 0
                 })
 
@@ -8629,9 +8932,9 @@ do
                     TextColor3 = Color3.fromRGB(100, 100, 100),
                     Text = Toggle.Name,
                     AnchorPoint = Vector2.new(0, 0.5),
-                    Size = UDim2.new(0, 0, 0, 12),
+                    Size = UDim2.new(0, 0, 0, 14),
                     BackgroundTransparency = 1,
-                    Position = UDim2.new(0, ToggleTextOffset, 0.5, -2),
+                    Position = UDim2.new(0, 44, 0.5, 0),
                     BorderSizePixel = 0,
                     AutomaticSize = Enum.AutomaticSize.X
                 }):AddToTheme({ TextColor3 = 'Inactive Text' })
