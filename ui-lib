@@ -207,18 +207,18 @@ do
 
     local Themes = {
         ["Preset"] = {
-            ["Background"] = Color3.fromRGB(17, 17, 17),
-            ["Outline"] = Color3.fromRGB(42, 42, 42),
-            ["Border"] = Color3.fromRGB(8, 8, 8),
-            ["Accent"] = Color3.fromRGB(220, 140, 40),
+            ["Background"] = Color3.fromRGB(15, 15, 18),
+            ["Outline"] = Color3.fromRGB(45, 45, 52),
+            ["Border"] = Color3.fromRGB(8, 8, 10),
+            ["Accent"] = Color3.fromRGB(255, 145, 50),
             ["Risky"] = Color3.fromRGB(255, 60, 60),
-            ["Light Border"] = Color3.fromRGB(28, 28, 28),
-            ["Border 2"] = Color3.fromRGB(6, 6, 6),
-            ["Text"] = Color3.fromRGB(210, 210, 210),
-            ["Section"] = Color3.fromRGB(22, 22, 22),
-            ["Element"] = Color3.fromRGB(28, 28, 28),
-            ["Hovered Element"] = Color3.fromRGB(38, 38, 38),
-            ["Inactive Text"] = Color3.fromRGB(95, 95, 95)
+            ["Light Border"] = Color3.fromRGB(30, 30, 35),
+            ["Border 2"] = Color3.fromRGB(6, 6, 8),
+            ["Text"] = Color3.fromRGB(225, 225, 230),
+            ["Section"] = Color3.fromRGB(20, 20, 24),
+            ["Element"] = Color3.fromRGB(30, 30, 36),
+            ["Hovered Element"] = Color3.fromRGB(40, 40, 48),
+            ["Inactive Text"] = Color3.fromRGB(110, 110, 120)
         }
     }
 
@@ -321,6 +321,14 @@ do
             end
 
             Data.Instance[Index] = Property
+        end
+
+        do
+            local _inst = Data.Instance
+            local _cls  = Class
+            if _cls == "UIStroke" then
+                pcall(function() _inst.LineJoinMode = Enum.LineJoinMode.Round end)
+            end
         end
 
         return setmetatable(Data, Library)
@@ -1505,12 +1513,19 @@ do
                     Color = Library.Theme["Outline"]
                 }):AddToTheme({ Color = 'Outline' })
 
+                do
+                    local _cpwCorner = Instance.new("UICorner")
+                    _cpwCorner.CornerRadius = UDim.new(0, 10)
+                    _cpwCorner.Parent = Items["ColorpickerWindow"].Instance
+                end
+
                 Items["AccentLiner"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["ColorpickerWindow"].Instance,
                     Size = UDim2.new(0, 2, 1, 0),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Accent"]
+                    BackgroundColor3 = Library.Theme["Accent"],
+                    Visible = false
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
 
                 Items["Shadow"] = Library:Create("ImageLabel", {
@@ -1542,6 +1557,12 @@ do
                     Size = UDim2.new(1, -46, 1, -48),
                     BorderSizePixel = 0,
                 })
+
+                do
+                    local _plCorner = Instance.new("UICorner")
+                    _plCorner.CornerRadius = UDim.new(0, 6)
+                    _plCorner.Parent = Items["Palette"].Instance
+                end
 
                 Items["Saturation"] = Library:Create("Frame", {
                     Name = "\0",
@@ -1626,6 +1647,12 @@ do
                     BorderSizePixel = 0
                 })
 
+                do
+                    local _hueCorner = Instance.new("UICorner")
+                    _hueCorner.CornerRadius = UDim.new(0, 4)
+                    _hueCorner.Parent = Items["Hue"].Instance
+                end
+
                 Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["Hue"].Instance,
@@ -1679,6 +1706,12 @@ do
                     Size = UDim2.new(1, -46, 0, 15),
                     BorderSizePixel = 0
                 })
+
+                do
+                    local _alCorner = Instance.new("UICorner")
+                    _alCorner.CornerRadius = UDim.new(0, 4)
+                    _alCorner.Parent = Items["Alpha"].Instance
+                end
 
                 Library:Create("UIStroke", {
                     Name = "\0",
@@ -2347,12 +2380,19 @@ do
                     Color = Library.Theme["Outline"]
                 }):AddToTheme({ Color = 'Outline' })
 
+                do
+                    local _kbwCorner = Instance.new("UICorner")
+                    _kbwCorner.CornerRadius = UDim.new(0, 10)
+                    _kbwCorner.Parent = Items["KeybindWindow"].Instance
+                end
+
                 Items["AccentLiner"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["KeybindWindow"].Instance,
                     Size = UDim2.new(0, 2, 1, 0),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Accent"]
+                    BackgroundColor3 = Library.Theme["Accent"],
+                    Visible = false
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
 
                 Keybind.Items = Items
@@ -2740,6 +2780,12 @@ do
 
                 Items["Watermark"]:MakeDraggable()
 
+                do
+                    local _wmCorner = Instance.new("UICorner")
+                    _wmCorner.CornerRadius = UDim.new(0, 8)
+                    _wmCorner.Parent = Items["Watermark"].Instance
+                end
+
                 Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["Watermark"].Instance,
@@ -2923,6 +2969,12 @@ do
 
                 Items["KeybindList"]:MakeDraggable()
 
+                do
+                    local _kblCorner = Instance.new("UICorner")
+                    _kblCorner.CornerRadius = UDim.new(0, 8)
+                    _kblCorner.Parent = Items["KeybindList"].Instance
+                end
+
                 Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["KeybindList"].Instance,
@@ -3068,6 +3120,12 @@ do
                     AutomaticSize = Enum.AutomaticSize.X,
                     BackgroundColor3 = Library.Theme["Section"]
                 }):AddToTheme({ BackgroundColor3 = 'Section' })
+
+                do
+                    local _ntCorner = Instance.new("UICorner")
+                    _ntCorner.CornerRadius = UDim.new(0, 8)
+                    _ntCorner.Parent = Items["Notification"].Instance
+                end
 
                 Library:Create("UIPadding", {
                     Name = "\0",
@@ -4371,6 +4429,12 @@ do
 
                 Items["TargetIndicator"]:MakeDraggable()
 
+                do
+                    local _tiCorner = Instance.new("UICorner")
+                    _tiCorner.CornerRadius = UDim.new(0, 10)
+                    _tiCorner.Parent = Items["TargetIndicator"].Instance
+                end
+
                 Items["GlowStroke"] = Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["TargetIndicator"].Instance,
@@ -4398,6 +4462,12 @@ do
                     Size = UDim2.new(0, 60, 0, 60),
                     BorderSizePixel = 0
                 })
+
+                do
+                    local _avCorner = Instance.new("UICorner")
+                    _avCorner.CornerRadius = UDim.new(0, 8)
+                    _avCorner.Parent = Items["Avatar"].Instance
+                end
 
                 Library:Create("UIStroke", {
                     Name = "\0",
@@ -5036,6 +5106,12 @@ do
                     BackgroundColor3 = Library.Theme["Background"]
                 }):AddToTheme({ BackgroundColor3 = "Background" })
 
+                do
+                    local _ivCorner = Instance.new("UICorner")
+                    _ivCorner.CornerRadius = UDim.new(0, 10)
+                    _ivCorner.Parent = Items["InventoryViewer"].Instance
+                end
+
                 Items["InventoryViewer"]:MakeDraggable()
                 Items["InventoryViewer"]:MakeResizeable(Viewer.MinimumSize)
 
@@ -5061,7 +5137,8 @@ do
                     Parent = Items["InventoryViewer"].Instance,
                     Size = UDim2.new(0, 2, 1, 0),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Accent"]
+                    BackgroundColor3 = Library.Theme["Accent"],
+                    Visible = false
                 }):AddToTheme({ BackgroundColor3 = "Accent" })
 
                 Library:Create("Frame", {
@@ -7436,7 +7513,7 @@ do
                     Parent = Library.Holder.Instance,
                     AnchorPoint = Vector2.new(0.5, 0.5),
                     Position = UDim2.new(0.5, 0, 0.5, 0),
-                    Size = UDim2.new(0, 552, 0, 451),
+                    Size = UDim2.new(0, 720, 0, 480),
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Background"]
                 }):AddToTheme({ BackgroundColor3 = 'Background' })
@@ -7718,9 +7795,9 @@ do
 
                 Items["Header"].Instance.Visible = false
 
-                local TAB_W    = 44
-                local TAB_H    = 44
-                local TAB_PAD  = 1
+                local TAB_W    = 140
+                local TAB_H    = 36
+                local TAB_PAD  = 4
                 local MAX_TABS = 5
                 local SIDE_PAD = 8
 
@@ -7733,6 +7810,12 @@ do
                     BackgroundColor3 = Library.Theme["Section"],
                     ClipsDescendants = true
                 }):AddToTheme({ BackgroundColor3 = "Section" })
+
+                do
+                    local _poCorner = Instance.new("UICorner")
+                    _poCorner.CornerRadius = UDim.new(0, 10)
+                    _poCorner.Parent = Items["PagesOutline"].Instance
+                end
 
                 Library:Create("UIStroke", {
                     Name = "\0",
@@ -7785,6 +7868,12 @@ do
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Border 2"]
                 }):AddToTheme({ BackgroundColor3 = "Border 2" })
+
+                do
+                    local _coCorner = Instance.new("UICorner")
+                    _coCorner.CornerRadius = UDim.new(0, 10)
+                    _coCorner.Parent = Items["ContentOutline"].Instance
+                end
 
                 Items["Content"] = Library:Create("Frame", {
                     Name = "\0",
@@ -8038,6 +8127,12 @@ do
                     ClipsDescendants = false
                 }):AddToTheme({ BackgroundColor3 = "Background" })
 
+                do
+                    local _toCorner = Instance.new("UICorner")
+                    _toCorner.CornerRadius = UDim.new(0, 8)
+                    _toCorner.Parent = Items["TabOuter"].Instance
+                end
+
                 Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["TabOuter"].Instance,
@@ -8062,24 +8157,46 @@ do
                     Name = "\0",
                     Parent = Items["TabButton"].Instance,
                     Image = Page.Icon,
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    Size = UDim2.new(0, 22, 0, 22),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Position = UDim2.new(0, 10, 0.5, 0),
+                    Size = UDim2.new(0, 20, 0, 20),
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
                     ImageColor3 = Library.Theme["Inactive Text"]
                 }):AddToTheme({ ImageColor3 = "Inactive Text" })
 
+                Items["TabName"] = Library:Create("TextLabel", {
+                    Name = "\0",
+                    FontFace = Library.Font,
+                    TextSize = Library.FontSize,
+                    Parent = Items["TabButton"].Instance,
+                    Text = tostring(Page.Name or ""),
+                    TextColor3 = Library.Theme["Inactive Text"],
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Position = UDim2.new(0, 36, 0.5, 0),
+                    Size = UDim2.new(1, -44, 0, 14),
+                    BackgroundTransparency = 1,
+                    BorderSizePixel = 0,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    ClipsDescendants = true
+                }):AddToTheme({ TextColor3 = "Inactive Text" })
+
                 Items["AccentBar"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["TabOuter"].Instance,
-                    AnchorPoint = Vector2.new(0, 0.5),
-                    Position = UDim2.new(0, 0, 0.5, 0),
-                    Size = UDim2.new(0, 2, 0.6, 0),
+                    AnchorPoint = Vector2.new(0, 1),
+                    Position = UDim2.new(0, 8, 1, 0),
+                    Size = UDim2.new(1, -16, 0, 2),
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Accent"],
                     BackgroundTransparency = 1
                 }):AddToTheme({ BackgroundColor3 = "Accent" })
+
+                do
+                    local _abCorner = Instance.new("UICorner")
+                    _abCorner.CornerRadius = UDim.new(1, 0)
+                    _abCorner.Parent = Items["AccentBar"].Instance
+                end
 
                 Items["Page"] = Library:Create("Frame", {
                     Name = "\0",
@@ -8147,12 +8264,16 @@ do
                     Items["AccentBar"].Instance.BackgroundTransparency = 0
                     Items["TabIcon"]:ChangeItemTheme({ ImageColor3 = "Accent" })
                     Items["TabIcon"]:Tween({ ImageColor3 = Library.Theme.Accent })
+                    Items["TabName"]:ChangeItemTheme({ TextColor3 = "Text" })
+                    Items["TabName"]:Tween({ TextColor3 = Library.Theme["Text"] })
                     Items["TabOuter"]:ChangeItemTheme({ BackgroundColor3 = "Element" })
                     Items["TabOuter"]:Tween({ BackgroundColor3 = Library.Theme["Element"] })
                 else
                     Items["AccentBar"].Instance.BackgroundTransparency = 1
                     Items["TabIcon"]:ChangeItemTheme({ ImageColor3 = "Inactive Text" })
                     Items["TabIcon"]:Tween({ ImageColor3 = Library.Theme["Inactive Text"] })
+                    Items["TabName"]:ChangeItemTheme({ TextColor3 = "Inactive Text" })
+                    Items["TabName"]:Tween({ TextColor3 = Library.Theme["Inactive Text"] })
                     Items["TabOuter"]:ChangeItemTheme({ BackgroundColor3 = "Background" })
                     Items["TabOuter"]:Tween({ BackgroundColor3 = Library.Theme["Background"] })
                 end
@@ -8411,6 +8532,17 @@ do
                     PaddingRight = UDim.new(0, 4),
                     PaddingLeft = UDim.new(0, 4)
                 })
+
+                do
+                    local _so = Items["SectionOutline"].Instance
+                    local _sc = Items["Section"].Instance
+                    local _oCorner = Instance.new("UICorner")
+                    _oCorner.CornerRadius = UDim.new(0, 8)
+                    _oCorner.Parent = _so
+                    local _sCorner = Instance.new("UICorner")
+                    _sCorner.CornerRadius = UDim.new(0, 7)
+                    _sCorner.Parent = _sc
+                end
 
                 Section.Items = Items
             end
@@ -8934,6 +9066,12 @@ do
                     Color = Library.Theme["Outline"]
                 }):AddToTheme({ Color = 'Outline' })
 
+                do
+                    local _bCorner = Instance.new("UICorner")
+                    _bCorner.CornerRadius = UDim.new(0, 6)
+                    _bCorner.Parent = Items["Button"].Instance
+                end
+
                 Library:Create("UIGradient", {
                     Name = "\0",
                     Parent = Items["Button"].Instance,
@@ -9063,6 +9201,18 @@ do
                     LineJoinMode = Enum.LineJoinMode.Miter,
                     Color = Library.Theme["Border"]
                 }):AddToTheme({ Color = 'Border' })
+
+                do
+                    local _rsCorner = Instance.new("UICorner")
+                    _rsCorner.CornerRadius = UDim.new(0, 3)
+                    _rsCorner.Parent = Items["RealSlider"].Instance
+                end
+
+                do
+                    local _acCorner = Instance.new("UICorner")
+                    _acCorner.CornerRadius = UDim.new(0, 3)
+                    _acCorner.Parent = Items["Accent"].Instance
+                end
 
                 Items["Accent"] = Library:Create("Frame", {
                     Name = "\0",
@@ -9258,6 +9408,12 @@ do
                     LineJoinMode = Enum.LineJoinMode.Miter,
                     Color = Library.Theme["Outline"]
                 }):AddToTheme({ Color = 'Outline' })
+
+                do
+                    local _rdCorner = Instance.new("UICorner")
+                    _rdCorner.CornerRadius = UDim.new(0, 6)
+                    _rdCorner.Parent = Items["RealDropdown"].Instance
+                end
 
                 Library:Create("UIGradient", {
                     Name = "\0",
@@ -9853,6 +10009,12 @@ do
                     Color = Library.Theme["Border"],
                     BorderOffset = UDim.new(0, -1)
                 }):AddToTheme({ Color = 'Border' })
+
+                do
+                    local _tbCorner = Instance.new("UICorner")
+                    _tbCorner.CornerRadius = UDim.new(0, 6)
+                    _tbCorner.Parent = Items["Background"].Instance
+                end
 
                 Items["Input"] = Library:Create("TextBox", {
                     Name = "\0",
