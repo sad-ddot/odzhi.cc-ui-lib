@@ -7445,6 +7445,12 @@ do
                 Items["MainFrame"]:MakeResizeable(Vector2.new(Items["MainFrame"].Instance.AbsoluteSize.X,
                     Items["MainFrame"].Instance.AbsoluteSize.Y))
 
+                do
+                    local _mfCorner = Instance.new("UICorner")
+                    _mfCorner.CornerRadius = UDim.new(0, 10)
+                    _mfCorner.Parent = Items["MainFrame"].Instance
+                end
+
                 Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["MainFrame"].Instance,
@@ -7467,7 +7473,8 @@ do
                     Parent = Items["MainFrame"].Instance,
                     Size = UDim2.new(0, 2, 1, 0),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Accent"]
+                    BackgroundColor3 = Library.Theme["Accent"],
+                    Visible = false
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
 
                 Items["DarkLiner"] = Library:Create("Frame", {
@@ -8468,27 +8475,33 @@ do
                     Parent = Items["Toggle"].Instance,
                     AnchorPoint = Vector2.new(0, 0.5),
                     Position = UDim2.new(0, 0, 0.5, 0),
-                    Size = UDim2.new(0, 8, 0, 8),
+                    Size = UDim2.new(0, 36, 0, 18),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Element"]
-                }):AddToTheme({ BackgroundColor3 = 'Element' })
+                    BackgroundColor3 = Color3.fromRGB(50, 50, 55)
+                }):AddToTheme({ BackgroundColor3 = function() return Color3.fromRGB(50, 50, 55) end })
 
-                Library:Create("UIStroke", {
-                    Name = "\0",
-                    Parent = Items["Indicator"].Instance,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    LineJoinMode = Enum.LineJoinMode.Miter,
-                    Color = Library.Theme["Border"]
-                }):AddToTheme({ Color = 'Border' })
+                do
+                    local _indCorner = Instance.new("UICorner")
+                    _indCorner.CornerRadius = UDim.new(1, 0)
+                    _indCorner.Parent = Items["Indicator"].Instance
+                end
 
                 Items["Inline"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["Indicator"].Instance,
-                    BackgroundTransparency = 1,
-                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 0,
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Position = UDim2.new(0, 2, 0.5, 0),
+                    Size = UDim2.new(0, 14, 0, 14),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Accent"]
-                }):AddToTheme({ BackgroundColor3 = 'Accent' })
+                    BackgroundColor3 = Color3.fromRGB(130, 130, 135)
+                }):AddToTheme({ BackgroundColor3 = function() return Color3.fromRGB(130, 130, 135) end })
+
+                do
+                    local _knobCorner = Instance.new("UICorner")
+                    _knobCorner.CornerRadius = UDim.new(1, 0)
+                    _knobCorner.Parent = Items["Inline"].Instance
+                end
 
                 Items["Text"] = Library:Create("TextLabel", {
                     Name = "\0",
@@ -8543,14 +8556,19 @@ do
             function Toggle:Set(Bool)
                 Toggle.Value = Bool
 
+                local _knobPos    = Bool and UDim2.new(1, -16, 0.5, 0) or UDim2.new(0, 2, 0.5, 0)
+                local _knobColor  = Bool and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(130, 130, 135)
+                local _trackColor = Bool and Color3.fromRGB(255, 145, 50) or Color3.fromRGB(50, 50, 55)
+
+                Items["Inline"]:Tween({ Position = _knobPos, BackgroundColor3 = _knobColor })
+                Items["Indicator"]:Tween({ BackgroundColor3 = _trackColor })
+
                 if Bool then
-                    Items["Inline"]:Tween({ BackgroundTransparency = 0, Size = UDim2.new(1, 0, 1, 0) })
                     if not Toggle.Risky then
                         Items["Text"]:ChangeItemTheme({ TextColor3 = "Text" })
                         Items["Text"]:Tween({ TextColor3 = Library.Theme.Text })
                     end
                 else
-                    Items["Inline"]:Tween({ BackgroundTransparency = 1, Size = UDim2.new(0, 0, 0, 0) })
                     if not Toggle.Risky then
                         Items["Text"]:ChangeItemTheme({ TextColor3 = "Inactive Text" })
                         Items["Text"]:Tween({ TextColor3 = Library.Theme["Inactive Text"] })
