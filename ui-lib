@@ -1239,7 +1239,7 @@ do
             BackgroundColor3 = Library.Theme["Background"],
             Visible = true
         })
-        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = Frame.Instance
+        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 2); corner.Parent = Frame.Instance
         local Input = Library:Create("TextBox", {
             Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
             Parent = Frame.Instance,
@@ -1318,7 +1318,7 @@ do
             BackgroundColor3 = Library.Theme["Background"],
             Visible = true
         })
-        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = Frame.Instance
+        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 2); corner.Parent = Frame.Instance
         local stroke = Instance.new("UIStroke"); stroke.Color = Library.Theme["Outline"]; stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; stroke.Parent = Frame.Instance
         local Title = Library:Create("TextLabel", {
             Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
@@ -1344,7 +1344,7 @@ do
             Position = UDim2.new(0, 8, 0, 46),
             BorderSizePixel = 0, BackgroundColor3 = Library.Theme["Section"]
         })
-        local pc = Instance.new("UICorner"); pc.CornerRadius = UDim.new(0, 4); pc.Parent = Palette.Instance
+        local pc = Instance.new("UICorner"); pc.CornerRadius = UDim.new(0, 2); pc.Parent = Palette.Instance
         local Layout = Instance.new("UIListLayout")
         Layout.FillDirection = Enum.FillDirection.Horizontal
         Layout.Padding = UDim.new(0, 4)
@@ -1361,7 +1361,7 @@ do
                 BackgroundColor3 = Color3.fromRGB(c[1], c[2], c[3]),
                 Text = "", AutoButtonColor = false, BorderSizePixel = 0
             })
-            local sc = Instance.new("UICorner"); sc.CornerRadius = UDim.new(0, 3); sc.Parent = sw.Instance
+            local sc = Instance.new("UICorner"); sc.CornerRadius = UDim.new(0, 2); sc.Parent = sw.Instance
             sw.Instance.MouseButton1Click:Connect(function()
                 Library:SetThemeAccent(c[1], c[2], c[3])
             end)
@@ -1376,7 +1376,7 @@ do
             FontFace = Library.Font, TextSize = Library.FontSize,
             AutoButtonColor = false, BorderSizePixel = 0
         })
-        local apc = Instance.new("UICorner"); apc.CornerRadius = UDim.new(0, 4); apc.Parent = AccentPicker.Instance
+        local apc = Instance.new("UICorner"); apc.CornerRadius = UDim.new(0, 2); apc.Parent = AccentPicker.Instance
         AccentPicker.Instance.MouseButton1Click:Connect(function()
             Library:SetThemeAccent(255, 145, 50)
         end)
@@ -1389,7 +1389,7 @@ do
             FontFace = Library.Font, TextSize = Library.FontSize,
             AutoButtonColor = false, BorderSizePixel = 0
         })
-        local cbc = Instance.new("UICorner"); cbc.CornerRadius = UDim.new(0, 4); cbc.Parent = CloseBtn.Instance
+        local cbc = Instance.new("UICorner"); cbc.CornerRadius = UDim.new(0, 2); cbc.Parent = CloseBtn.Instance
         function Frame:Toggle() self.Instance.Visible = not self.Instance.Visible end
         function Frame:Close() self.Instance:Destroy(); Library.SettingsWindow = nil end
         CloseBtn.Instance.MouseButton1Click:Connect(function() Frame:Close() end)
@@ -1413,7 +1413,7 @@ do
             BackgroundColor3 = Library.Theme["Background"],
             Visible = true
         })
-        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = Frame.Instance
+        local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 2); corner.Parent = Frame.Instance
         local stroke = Instance.new("UIStroke"); stroke.Color = Library.Theme["Outline"]; stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; stroke.Parent = Frame.Instance
         local Title = Library:Create("TextLabel", {
             Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
@@ -1433,7 +1433,7 @@ do
             BorderSizePixel = 0, CanvasSize = UDim2.new(0, 0, 0, 0),
             AutomaticCanvasSize = Enum.AutomaticSize.Y
         })
-        local lc = Instance.new("UICorner"); lc.CornerRadius = UDim.new(0, 4); lc.Parent = List.Instance
+        local lc = Instance.new("UICorner"); lc.CornerRadius = UDim.new(0, 2); lc.Parent = List.Instance
         local Layout = Instance.new("UIListLayout"); Layout.Padding = UDim.new(0, 3); Layout.Parent = List.Instance
         local function refresh()
             for _, c in ipairs(List.Instance:GetChildren()) do
@@ -1451,7 +1451,7 @@ do
                     TextXAlignment = Enum.TextXAlignment.Left,
                     AutoButtonColor = false, BorderSizePixel = 0
                 })
-                local rc = Instance.new("UICorner"); rc.CornerRadius = UDim.new(0, 3); rc.Parent = row.Instance
+                local rc = Instance.new("UICorner"); rc.CornerRadius = UDim.new(0, 2); rc.Parent = row.Instance
                 row.Instance.MouseButton1Click:Connect(function()
                     local path = Library.Directory .. Library.Folders.Configs .. "/" .. name .. ".json"
                     local ok, data = pcall(function() return readfile(path) end)
@@ -1469,7 +1469,7 @@ do
             FontFace = Library.Font, TextSize = Library.FontSize,
             AutoButtonColor = false, BorderSizePixel = 0
         })
-        local sbc = Instance.new("UICorner"); sbc.CornerRadius = UDim.new(0, 4); sbc.Parent = SaveBtn.Instance
+        local sbc = Instance.new("UICorner"); sbc.CornerRadius = UDim.new(0, 2); sbc.Parent = SaveBtn.Instance
         SaveBtn.Instance.MouseButton1Click:Connect(function()
             pcall(function() Library:SaveConfig("default") end)
             pcall(function() Library:Notify("Saved default", 3) end)
@@ -1484,7 +1484,7 @@ do
             FontFace = Library.Font, TextSize = Library.FontSize,
             AutoButtonColor = false, BorderSizePixel = 0
         })
-        local cbc = Instance.new("UICorner"); cbc.CornerRadius = UDim.new(0, 4); cbc.Parent = CloseBtn.Instance
+        local cbc = Instance.new("UICorner"); cbc.CornerRadius = UDim.new(0, 2); cbc.Parent = CloseBtn.Instance
         function Frame:Toggle() self.Instance.Visible = not self.Instance.Visible end
         function Frame:Close() self.Instance:Destroy(); Library.ConfigWindow = nil end
         CloseBtn.Instance.MouseButton1Click:Connect(function() Frame:Close() end)
@@ -1833,7 +1833,7 @@ do
 
                 do
                     local _cpwCorner = Instance.new("UICorner")
-                    _cpwCorner.CornerRadius = UDim.new(0, 6)
+                    _cpwCorner.CornerRadius = UDim.new(0, 2)
                     _cpwCorner.Parent = Items["ColorpickerWindow"].Instance
                 end
 
@@ -1878,7 +1878,7 @@ do
 
                 do
                     local _plCorner = Instance.new("UICorner")
-                    _plCorner.CornerRadius = UDim.new(0, 6)
+                    _plCorner.CornerRadius = UDim.new(0, 2)
                     _plCorner.Parent = Items["Palette"].Instance
                 end
 
@@ -1967,7 +1967,7 @@ do
 
                 do
                     local _hueCorner = Instance.new("UICorner")
-                    _hueCorner.CornerRadius = UDim.new(0, 4)
+                    _hueCorner.CornerRadius = UDim.new(0, 2)
                     _hueCorner.Parent = Items["Hue"].Instance
                 end
 
@@ -2027,7 +2027,7 @@ do
 
                 do
                     local _alCorner = Instance.new("UICorner")
-                    _alCorner.CornerRadius = UDim.new(0, 4)
+                    _alCorner.CornerRadius = UDim.new(0, 2)
                     _alCorner.Parent = Items["Alpha"].Instance
                 end
 
@@ -2700,7 +2700,7 @@ do
 
                 do
                     local _kbwCorner = Instance.new("UICorner")
-                    _kbwCorner.CornerRadius = UDim.new(0, 6)
+                    _kbwCorner.CornerRadius = UDim.new(0, 2)
                     _kbwCorner.Parent = Items["KeybindWindow"].Instance
                 end
 
@@ -3100,7 +3100,7 @@ do
 
                 do
                     local _wmCorner = Instance.new("UICorner")
-                    _wmCorner.CornerRadius = UDim.new(0, 5)
+                    _wmCorner.CornerRadius = UDim.new(0, 2)
                     _wmCorner.Parent = Items["Watermark"].Instance
                 end
 
@@ -3289,7 +3289,7 @@ do
 
                 do
                     local _kblCorner = Instance.new("UICorner")
-                    _kblCorner.CornerRadius = UDim.new(0, 5)
+                    _kblCorner.CornerRadius = UDim.new(0, 2)
                     _kblCorner.Parent = Items["KeybindList"].Instance
                 end
 
@@ -3441,7 +3441,7 @@ do
 
                 do
                     local _ntCorner = Instance.new("UICorner")
-                    _ntCorner.CornerRadius = UDim.new(0, 5)
+                    _ntCorner.CornerRadius = UDim.new(0, 2)
                     _ntCorner.Parent = Items["Notification"].Instance
                 end
 
@@ -4749,7 +4749,7 @@ do
 
                 do
                     local _tiCorner = Instance.new("UICorner")
-                    _tiCorner.CornerRadius = UDim.new(0, 6)
+                    _tiCorner.CornerRadius = UDim.new(0, 2)
                     _tiCorner.Parent = Items["TargetIndicator"].Instance
                 end
 
@@ -4765,7 +4765,7 @@ do
 
                 do
                     local _avCorner = Instance.new("UICorner")
-                    _avCorner.CornerRadius = UDim.new(0, 5)
+                    _avCorner.CornerRadius = UDim.new(0, 2)
                     _avCorner.Parent = Items["Avatar"].Instance
                 end
 
@@ -4811,12 +4811,12 @@ do
 
                 do
                     local _hbCorner = Instance.new("UICorner")
-                    _hbCorner.CornerRadius = UDim.new(0, 3)
+                    _hbCorner.CornerRadius = UDim.new(0, 2)
                     _hbCorner.Parent = Items["Healthbar"].Instance
                 end
                 do
                     local _hbfCorner = Instance.new("UICorner")
-                    _hbfCorner.CornerRadius = UDim.new(0, 3)
+                    _hbfCorner.CornerRadius = UDim.new(0, 2)
                     _hbfCorner.Parent = Items["HealthbarFill"].Instance
                 end
 
@@ -5383,7 +5383,7 @@ do
 
                 do
                     local _ivCorner = Instance.new("UICorner")
-                    _ivCorner.CornerRadius = UDim.new(0, 6)
+                    _ivCorner.CornerRadius = UDim.new(0, 2)
                     _ivCorner.Parent = Items["InventoryViewer"].Instance
                 end
 
@@ -7799,7 +7799,7 @@ do
 
                 do
                     local _mfCorner = Instance.new("UICorner")
-                    _mfCorner.CornerRadius = UDim.new(0, 6)
+                    _mfCorner.CornerRadius = UDim.new(0, 2)
                     _mfCorner.Parent = Items["MainFrame"].Instance
                 end
 
@@ -8088,7 +8088,7 @@ do
 
                 do
                     local _poCorner = Instance.new("UICorner")
-                    _poCorner.CornerRadius = UDim.new(0, 6)
+                    _poCorner.CornerRadius = UDim.new(0, 2)
                     _poCorner.Parent = Items["PagesOutline"].Instance
                 end
 
@@ -8158,7 +8158,7 @@ do
 
                 do
                     local _coCorner = Instance.new("UICorner")
-                    _coCorner.CornerRadius = UDim.new(0, 6)
+                    _coCorner.CornerRadius = UDim.new(0, 2)
                     _coCorner.Parent = Items["ContentOutline"].Instance
                 end
 
@@ -8200,12 +8200,12 @@ do
                         end, function()
                             b:Tween({ ImageColor3 = Library.Theme["Inactive Text"] })
                         end)
-                        Library:Connect(b.MouseButton1Click, onClick)
+                        Library:Connect(b.Instance.MouseButton1Click, onClick)
                         return b
                     end
 
                     Items["SearchBtn"]   = makeIconBtn("rbxassetid://15999597350",  "search",   function() pcall(function() Library:OpenSearch() end) end)
-                    Items["ConfigBtn"]   = makeIconBtn("rbxassetid://129261498595427", "config",   function() pcall(function() Library:OpenConfig() end) end)
+                    Items["ConfigBtn"]   = makeIconBtn("rbxassetid://87350324375899", "config",   function() pcall(function() Library:OpenConfig() end) end)
                     Items["SaveBtn"]     = makeIconBtn("rbxassetid://12403099678", "save",     function() pcall(function() Library:SaveConfig("default") end) pcall(function() Library:Notify("Saved default", 3) end) end)
                     Items["SettingsBtn"] = makeIconBtn("rbxassetid://129261498595427", "settings", function() pcall(function() Library:OpenSettings() end) end)
                 end
@@ -8446,7 +8446,7 @@ do
 
                 do
                     local _toCorner = Instance.new("UICorner")
-                    _toCorner.CornerRadius = UDim.new(0, 6)
+                    _toCorner.CornerRadius = UDim.new(0, 2)
                     _toCorner.Parent = Items["TabOuter"].Instance
                 end
 
@@ -8826,7 +8826,7 @@ do
                     local _so = Items["SectionOutline"].Instance
                     local _sc = Items["Section"].Instance
                     local _oCorner = Instance.new("UICorner")
-                    _oCorner.CornerRadius = UDim.new(0, 5)
+                    _oCorner.CornerRadius = UDim.new(0, 2)
                     _oCorner.Parent = _so
                     local _sCorner = Instance.new("UICorner")
                     _sCorner.CornerRadius = UDim.new(0, 7)
@@ -9359,7 +9359,7 @@ do
 
                 do
                     local _bCorner = Instance.new("UICorner")
-                    _bCorner.CornerRadius = UDim.new(0, 6)
+                    _bCorner.CornerRadius = UDim.new(0, 2)
                     _bCorner.Parent = Items["Button"].Instance
                 end
 
@@ -9495,7 +9495,7 @@ do
 
                 do
                     local _rsCorner = Instance.new("UICorner")
-                    _rsCorner.CornerRadius = UDim.new(0, 3)
+                    _rsCorner.CornerRadius = UDim.new(0, 2)
                     _rsCorner.Parent = Items["RealSlider"].Instance
                 end
 
@@ -9509,7 +9509,7 @@ do
 
                 do
                     local _acCorner = Instance.new("UICorner")
-                    _acCorner.CornerRadius = UDim.new(0, 3)
+                    _acCorner.CornerRadius = UDim.new(0, 2)
                     _acCorner.Parent = Items["Accent"].Instance
                 end
 
@@ -9702,7 +9702,7 @@ do
 
                 do
                     local _rdCorner = Instance.new("UICorner")
-                    _rdCorner.CornerRadius = UDim.new(0, 6)
+                    _rdCorner.CornerRadius = UDim.new(0, 2)
                     _rdCorner.Parent = Items["RealDropdown"].Instance
                 end
 
@@ -10303,7 +10303,7 @@ do
 
                 do
                     local _tbCorner = Instance.new("UICorner")
-                    _tbCorner.CornerRadius = UDim.new(0, 6)
+                    _tbCorner.CornerRadius = UDim.new(0, 2)
                     _tbCorner.Parent = Items["Background"].Instance
                 end
 
