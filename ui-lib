@@ -1430,7 +1430,7 @@ do
         arstroke.Thickness = 1
         arstroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         arstroke.Parent = AccentRow.Instance
-        arstroke:AddToTheme({ Color = "Border" })
+        table.insert(Library.ThemeMap, { Instance = arstroke, Property = "Color", ThemeKey = "Border" })
 
         local Swatch = Library:Create("Frame", {
             Name = "\0", Parent = AccentRow.Instance,
@@ -1485,7 +1485,7 @@ do
         cbstroke.Thickness = 1
         cbstroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         cbstroke.Parent = CbRow.Instance
-        cbstroke:AddToTheme({ Color = "Border" })
+        table.insert(Library.ThemeMap, { Instance = cbstroke, Property = "Color", ThemeKey = "Border" })
         local CbLbl = Library:Create("TextLabel", {
             Name = "\0", FontFace = Library.Font, TextSize = Library.FontSize,
             Parent = CbRow.Instance,
@@ -1799,7 +1799,7 @@ do
         List:AddToTheme({ BackgroundColor3 = "Section" })
         local lc = Instance.new("UICorner"); lc.CornerRadius = UDim.new(0, 4); lc.Parent = List.Instance
         local listStroke = Instance.new("UIStroke"); listStroke.Color = Library.Theme["Border"]; listStroke.Thickness = 1; listStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; listStroke.Parent = List.Instance
-        listStroke:AddToTheme({ Color = "Border" })
+        table.insert(Library.ThemeMap, { Instance = listStroke, Property = "Color", ThemeKey = "Border" })
         local Layout = Instance.new("UIListLayout"); Layout.Padding = UDim.new(0, 3); Layout.Parent = List.Instance
         local ListPad = Instance.new("UIPadding")
         ListPad.PaddingTop = UDim.new(0, 3)
@@ -5191,7 +5191,7 @@ do
                 _tiStroke.Thickness = 1
                 _tiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 _tiStroke.Parent = Items["TargetIndicator"].Instance
-                _tiStroke:AddToTheme({ Color = "Border" })
+                table.insert(Library.ThemeMap, { Instance = _tiStroke, Property = "Color", ThemeKey = "Border" })
 
                 Items["Avatar"] = Library:Create("ImageLabel", {
                     Name = "\0",
