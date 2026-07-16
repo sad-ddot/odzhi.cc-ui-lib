@@ -207,18 +207,18 @@ do
 
     local Themes = {
         ["Preset"] = {
-            ["Background"] = Color3.fromRGB(15, 15, 18),
-            ["Outline"] = Color3.fromRGB(45, 45, 52),
-            ["Border"] = Color3.fromRGB(8, 8, 10),
+            ["Background"] = Color3.fromRGB(0, 0, 0),
+            ["Outline"] = Color3.fromRGB(38, 38, 44),
+            ["Border"] = Color3.fromRGB(18, 18, 22),
             ["Accent"] = Color3.fromRGB(255, 145, 50),
             ["Risky"] = Color3.fromRGB(255, 60, 60),
-            ["Light Border"] = Color3.fromRGB(30, 30, 35),
-            ["Border 2"] = Color3.fromRGB(6, 6, 8),
-            ["Text"] = Color3.fromRGB(225, 225, 230),
-            ["Section"] = Color3.fromRGB(20, 20, 24),
-            ["Element"] = Color3.fromRGB(30, 30, 36),
-            ["Hovered Element"] = Color3.fromRGB(40, 40, 48),
-            ["Inactive Text"] = Color3.fromRGB(110, 110, 120)
+            ["Light Border"] = Color3.fromRGB(25, 25, 30),
+            ["Border 2"] = Color3.fromRGB(8, 8, 10),
+            ["Text"] = Color3.fromRGB(230, 230, 235),
+            ["Section"] = Color3.fromRGB(10, 10, 14),
+            ["Element"] = Color3.fromRGB(22, 22, 28),
+            ["Hovered Element"] = Color3.fromRGB(32, 32, 40),
+            ["Inactive Text"] = Color3.fromRGB(105, 105, 115)
         }
     }
 
@@ -8181,34 +8181,6 @@ do
 
                 Window.Items = Items
                 Library.MainWindowFrame = Items["MainFrame"].Instance
-
-                do
-                    local function makeIconBtn(asset, name, onClick)
-                        local b = Library:Create("ImageButton", {
-                            Name = "\0",
-                            Parent = Items["HeaderButtonHolder"].Instance,
-                            Image = asset,
-                            ImageColor3 = Library.Theme["Inactive Text"],
-                            BackgroundTransparency = 1,
-                            AutoButtonColor = false,
-                            Size = UDim2.new(0, 16, 0, 16),
-                            BorderSizePixel = 0
-                        })
-                        b:AddToTheme({ ImageColor3 = "Inactive Text" })
-                        b:OnHover(function()
-                            b:Tween({ ImageColor3 = Library.Theme["Text"] })
-                        end, function()
-                            b:Tween({ ImageColor3 = Library.Theme["Inactive Text"] })
-                        end)
-                        Library:Connect(b.Instance.MouseButton1Click, onClick)
-                        return b
-                    end
-
-                    Items["SearchBtn"]   = makeIconBtn("rbxassetid://15999597350",  "search",   function() pcall(function() Library:OpenSearch() end) end)
-                    Items["ConfigBtn"]   = makeIconBtn("rbxassetid://87350324375899", "config",   function() pcall(function() Library:OpenConfig() end) end)
-                    Items["SaveBtn"]     = makeIconBtn("rbxassetid://12403099678", "save",     function() pcall(function() Library:SaveConfig("default") end) pcall(function() Library:Notify("Saved default", 3) end) end)
-                    Items["SettingsBtn"] = makeIconBtn("rbxassetid://129261498595427", "settings", function() pcall(function() Library:OpenSettings() end) end)
-                end
             end
 
             local Debounce = false
@@ -8503,8 +8475,8 @@ do
                     Name = "\0",
                     Parent = Items["Page"].Instance,
                     BackgroundTransparency = 1,
-                    Position = UDim2.new(0, 0, 0, 10),
-                    Size = UDim2.new(1, 0, 1, -10),
+                    Position = UDim2.new(0, 0, 0, 44),
+                    Size = UDim2.new(1, 0, 1, -44),
                     BorderSizePixel = 0
                 })
 
@@ -8512,7 +8484,7 @@ do
                     Name = "\0",
                     Parent = Items["Page"].Instance,
                     BackgroundTransparency = 1,
-                    Position = UDim2.new(0, 14, 0, 0),
+                    Position = UDim2.new(0, 14, 0, 22),
                     Size = UDim2.new(1, 0, 0, 20),
                     BorderSizePixel = 0
                 })
@@ -8530,6 +8502,53 @@ do
                     Parent = Items["SubPages"].Instance,
                     PaddingTop = UDim.new(0, 3)
                 })
+
+                Items["TopBar"] = Library:Create("Frame", {
+                    Name = "\0",
+                    Parent = Items["Page"].Instance,
+                    BackgroundTransparency = 1,
+                    Position = UDim2.new(0, 14, 0, -2),
+                    Size = UDim2.new(1, -28, 0, 22),
+                    BorderSizePixel = 0
+                })
+
+                Library:Create("UIListLayout", {
+                    Name = "\0",
+                    Parent = Items["TopBar"].Instance,
+                    FillDirection = Enum.FillDirection.Horizontal,
+                    HorizontalAlignment = Enum.HorizontalAlignment.Right,
+                    VerticalAlignment = Enum.VerticalAlignment.Center,
+                    Padding = UDim.new(0, 4),
+                    SortOrder = Enum.SortOrder.LayoutOrder
+                })
+
+                do
+                    local function makeIconBtn(asset, name, onClick)
+                        local b = Library:Create("ImageButton", {
+                            Name = "\0",
+                            Parent = Items["TopBar"].Instance,
+                            Image = asset,
+                            ImageColor3 = Library.Theme["Inactive Text"],
+                            BackgroundTransparency = 1,
+                            AutoButtonColor = false,
+                            Size = UDim2.new(0, 16, 0, 16),
+                            BorderSizePixel = 0
+                        })
+                        b:AddToTheme({ ImageColor3 = "Inactive Text" })
+                        b:OnHover(function()
+                            b:Tween({ ImageColor3 = Library.Theme["Text"] })
+                        end, function()
+                            b:Tween({ ImageColor3 = Library.Theme["Inactive Text"] })
+                        end)
+                        Library:Connect(b.Instance.MouseButton1Click, onClick)
+                        return b
+                    end
+
+                    Page.Items["SearchBtn"]   = makeIconBtn("rbxassetid://15999597350",  "search",   function() pcall(function() Library:OpenSearch() end) end)
+                    Page.Items["ConfigBtn"]   = makeIconBtn("rbxassetid://87350324375899", "config",   function() pcall(function() Library:OpenConfig() end) end)
+                    Page.Items["SaveBtn"]     = makeIconBtn("rbxassetid://12403099678", "save",     function() pcall(function() Library:SaveConfig("default") end) pcall(function() Library:Notify("Saved default", 3) end) end)
+                    Page.Items["SettingsBtn"] = makeIconBtn("rbxassetid://129261498595427", "settings", function() pcall(function() Library:OpenSettings() end) end)
+                end
 
                 Page.Items = Items
             end
