@@ -248,7 +248,7 @@ do
             return Font.new(getcustomasset(`{Library.Directory .. Library.Folders.Assets}/{Name}.font`))
         end
 
-        Library.Font = Font.fromEnum(Enum.Font.Code)
+        Library.Font = Font.fromEnum(Enum.Font.Gotham)
     end
 
     Library.Exit = function(Self)
@@ -7817,6 +7817,17 @@ do
                     _poCorner.Parent = Items["PagesOutline"].Instance
                 end
 
+                Items["Logo"] = Library:Create("ImageLabel", {
+                    Name = "\0",
+                    Parent = Items["PagesOutline"].Instance,
+                    Image = Params.Logo or Params.logo or "",
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(1, 0, 0, 48),
+                    ScaleType = Enum.ScaleType.Fit,
+                    Position = UDim2.new(0, 0, 0, 0),
+                    LayoutOrder = -1
+                })
+
                 Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["PagesOutline"].Instance,
@@ -7839,17 +7850,18 @@ do
                     Parent = Items["PagesOutline"].Instance,
                     FillDirection = Enum.FillDirection.Vertical,
                     HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                    Padding = UDim.new(0, TAB_PAD),
+                    VerticalAlignment = Enum.VerticalAlignment.Top,
+                    Padding = UDim.new(0, 6),
                     SortOrder = Enum.SortOrder.LayoutOrder
                 })
 
                 Library:Create("UIPadding", {
                     Name = "\0",
                     Parent = Items["PagesOutline"].Instance,
-                    PaddingTop    = UDim.new(0, TAB_PAD),
-                    PaddingBottom = UDim.new(0, TAB_PAD),
-                    PaddingLeft   = UDim.new(0, TAB_PAD),
-                    PaddingRight  = UDim.new(0, TAB_PAD)
+                    PaddingTop    = UDim.new(0, 60),
+                    PaddingBottom = UDim.new(0, 8),
+                    PaddingLeft   = UDim.new(0, 0),
+                    PaddingRight  = UDim.new(0, 0)
                 })
 
                 Window.TabW    = TAB_W
@@ -8121,25 +8133,19 @@ do
                 Items["TabOuter"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = WinI["PagesOutline"].Instance,
-                    Size = UDim2.new(1, -2, 0, TH - 2),
+                    Size = UDim2.new(1, 0, 0, TH),
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Background"],
-                    ClipsDescendants = false
+                    BackgroundTransparency = 1,
+                    ClipsDescendants = false,
+                    LayoutOrder = 1
                 }):AddToTheme({ BackgroundColor3 = "Background" })
 
                 do
                     local _toCorner = Instance.new("UICorner")
-                    _toCorner.CornerRadius = UDim.new(0, 8)
+                    _toCorner.CornerRadius = UDim.new(0, 6)
                     _toCorner.Parent = Items["TabOuter"].Instance
                 end
-
-                Library:Create("UIStroke", {
-                    Name = "\0",
-                    Parent = Items["TabOuter"].Instance,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    LineJoinMode = Enum.LineJoinMode.Miter,
-                    Color = Library.Theme["Outline"]
-                }):AddToTheme({ Color = "Outline" })
 
                 Items["TabButton"] = Library:Create("TextButton", {
                     Name = "\0",
@@ -8180,23 +8186,6 @@ do
                     TextXAlignment = Enum.TextXAlignment.Left,
                     ClipsDescendants = true
                 }):AddToTheme({ TextColor3 = "Inactive Text" })
-
-                Items["AccentBar"] = Library:Create("Frame", {
-                    Name = "\0",
-                    Parent = Items["TabOuter"].Instance,
-                    AnchorPoint = Vector2.new(0, 1),
-                    Position = UDim2.new(0, 8, 1, 0),
-                    Size = UDim2.new(1, -16, 0, 2),
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = Library.Theme["Accent"],
-                    BackgroundTransparency = 1
-                }):AddToTheme({ BackgroundColor3 = "Accent" })
-
-                do
-                    local _abCorner = Instance.new("UICorner")
-                    _abCorner.CornerRadius = UDim.new(1, 0)
-                    _abCorner.Parent = Items["AccentBar"].Instance
-                end
 
                 Items["Page"] = Library:Create("Frame", {
                     Name = "\0",
@@ -8261,21 +8250,18 @@ do
                 Page.Active = Bool
 
                 if Bool then
-                    Items["AccentBar"].Instance.BackgroundTransparency = 0
                     Items["TabIcon"]:ChangeItemTheme({ ImageColor3 = "Accent" })
                     Items["TabIcon"]:Tween({ ImageColor3 = Library.Theme.Accent })
                     Items["TabName"]:ChangeItemTheme({ TextColor3 = "Text" })
                     Items["TabName"]:Tween({ TextColor3 = Library.Theme["Text"] })
                     Items["TabOuter"]:ChangeItemTheme({ BackgroundColor3 = "Element" })
-                    Items["TabOuter"]:Tween({ BackgroundColor3 = Library.Theme["Element"] })
+                    Items["TabOuter"]:Tween({ BackgroundColor3 = Library.Theme["Element"], BackgroundTransparency = 0 })
                 else
-                    Items["AccentBar"].Instance.BackgroundTransparency = 1
                     Items["TabIcon"]:ChangeItemTheme({ ImageColor3 = "Inactive Text" })
                     Items["TabIcon"]:Tween({ ImageColor3 = Library.Theme["Inactive Text"] })
                     Items["TabName"]:ChangeItemTheme({ TextColor3 = "Inactive Text" })
                     Items["TabName"]:Tween({ TextColor3 = Library.Theme["Inactive Text"] })
-                    Items["TabOuter"]:ChangeItemTheme({ BackgroundColor3 = "Background" })
-                    Items["TabOuter"]:Tween({ BackgroundColor3 = Library.Theme["Background"] })
+                    Items["TabOuter"]:Tween({ BackgroundTransparency = 1 })
                 end
 
                 Items["Page"]:FadeDescendants(Bool, function()
@@ -8677,9 +8663,11 @@ do
                 })
 
                 Items["Toggle"]:OnHover(function()
-                    Items["Indicator"]:Tween({ BackgroundColor3 = Library.Theme["Hovered Element"] })
+                    Items["Text"]:Tween({ TextColor3 = Library.Theme["Text"] })
                 end, function()
-                    Items["Indicator"]:Tween({ BackgroundColor3 = Library.Theme["Element"] })
+                    if not Toggle.Value then
+                        Items["Text"]:Tween({ TextColor3 = Library.Theme["Inactive Text"] })
+                    end
                 end)
 
                 Toggle.Items = Items
@@ -9208,12 +9196,6 @@ do
                     _rsCorner.Parent = Items["RealSlider"].Instance
                 end
 
-                do
-                    local _acCorner = Instance.new("UICorner")
-                    _acCorner.CornerRadius = UDim.new(0, 3)
-                    _acCorner.Parent = Items["Accent"].Instance
-                end
-
                 Items["Accent"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["RealSlider"].Instance,
@@ -9221,6 +9203,12 @@ do
                     BorderSizePixel = 0,
                     BackgroundColor3 = Library.Theme["Accent"]
                 }):AddToTheme({ BackgroundColor3 = 'Accent' })
+
+                do
+                    local _acCorner = Instance.new("UICorner")
+                    _acCorner.CornerRadius = UDim.new(0, 3)
+                    _acCorner.Parent = Items["Accent"].Instance
+                end
 
                 Library:Create("UIGradient", {
                     Name = "\0",
@@ -9254,9 +9242,9 @@ do
                 })
 
                 Items["RealSlider"]:OnHover(function()
-                    Items["RealSlider"]:Tween({ BackgroundColor3 = Library.Theme["Hovered Element"] })
+                    Items["Text"]:Tween({ TextColor3 = Library.Theme["Text"] })
                 end, function()
-                    Items["RealSlider"]:Tween({ BackgroundColor3 = Library.Theme["Element"] })
+                    Items["Text"]:Tween({ TextColor3 = Library.Theme["Text"] })
                 end)
 
                 Slider.Items = Items
