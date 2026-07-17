@@ -1,7 +1,3 @@
-if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
-    pcall(function() getgenv().LiraLibrary:Exit() end)
-end
-
 -- Bad executor support (atleast by a bit)
 cloneref = cloneref or function(Object) return Object end
 
