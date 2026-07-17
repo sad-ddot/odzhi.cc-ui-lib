@@ -1,5 +1,5 @@
 if getgenv().LiraLibrary and getgenv().LiraLibrary.Exit then
-    getgenv().LiraLibrary:Exit()
+    pcall(function() getgenv().LiraLibrary:Exit() end)
 end
 
 -- Bad executor support (atleast by a bit)
@@ -252,37 +252,39 @@ do
     end
 
     Library.Exit = function(Self)
-        Self:ApplyWindowInputState(false)
+        pcall(function()
+            Self:ApplyWindowInputState(false)
 
-        if Self.BackgroundEffects then
-            Self.BackgroundEffects.IsSnowing = false
+            if Self.BackgroundEffects then
+                Self.BackgroundEffects.IsSnowing = false
 
-            if Self.BackgroundEffects.BlurEffect and Self.BackgroundEffects.BlurEffect.Parent then
-                Self.BackgroundEffects.BlurEffect:Destroy()
+                if Self.BackgroundEffects.BlurEffect and Self.BackgroundEffects.BlurEffect.Parent then
+                    Self.BackgroundEffects.BlurEffect:Destroy()
+                end
+
+                if Self.BackgroundEffects.Background and Self.BackgroundEffects.Background.Parent then
+                    Self.BackgroundEffects.Background:Destroy()
+                end
             end
 
-            if Self.BackgroundEffects.Background and Self.BackgroundEffects.Background.Parent then
-                Self.BackgroundEffects.Background:Destroy()
+            for _, Connection in Library.Connections do
+                pcall(function() Connection:Disconnect() end)
             end
-        end
 
-        for _, Connection in Library.Connections do
-            Connection:Disconnect()
-        end
+            for _, Thread in Library.Threads do
+                pcall(function() coroutine.close(Thread) end)
+            end
 
-        for _, Thread in Library.Threads do
-            coroutine.close(Thread)
-        end
+            if Self.Holder then
+                Self.Holder.Instance:Destroy()
+            end
 
-        if Self.Holder then
-            Self.Holder.Instance:Destroy()
-        end
+            if Self.UnusedHolder then
+                Self.UnusedHolder.Instance:Destroy()
+            end
 
-        if Self.UnusedHolder then
-            Self.UnusedHolder.Instance:Destroy()
-        end
-
-        getgenv().LiraLibrary = nil
+            getgenv().LiraLibrary = nil
+        end)
     end
 
     Library.Create = function(Self, Class, Properties)
