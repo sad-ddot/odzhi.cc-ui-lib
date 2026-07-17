@@ -207,18 +207,18 @@ do
 
     local Themes = {
         ["Preset"] = {
-            ["Background"] = Color3.fromRGB(0, 0, 0),
-            ["Outline"] = Color3.fromRGB(38, 38, 44),
-            ["Border"] = Color3.fromRGB(18, 18, 22),
+            ["Background"] = Color3.fromRGB(18, 18, 22),
+            ["Outline"] = Color3.fromRGB(40, 40, 48),
+            ["Border"] = Color3.fromRGB(24, 24, 30),
             ["Accent"] = Color3.fromRGB(255, 145, 50),
             ["Risky"] = Color3.fromRGB(255, 60, 60),
-            ["Light Border"] = Color3.fromRGB(25, 25, 30),
-            ["Border 2"] = Color3.fromRGB(8, 8, 10),
-            ["Text"] = Color3.fromRGB(230, 230, 235),
-            ["Section"] = Color3.fromRGB(10, 10, 14),
-            ["Element"] = Color3.fromRGB(22, 22, 28),
-            ["Hovered Element"] = Color3.fromRGB(32, 32, 40),
-            ["Inactive Text"] = Color3.fromRGB(105, 105, 115)
+            ["Light Border"] = Color3.fromRGB(32, 32, 40),
+            ["Border 2"] = Color3.fromRGB(12, 12, 16),
+            ["Text"] = Color3.fromRGB(232, 232, 238),
+            ["Section"] = Color3.fromRGB(24, 24, 30),
+            ["Element"] = Color3.fromRGB(34, 34, 42),
+            ["Hovered Element"] = Color3.fromRGB(46, 46, 56),
+            ["Inactive Text"] = Color3.fromRGB(118, 118, 128)
         }
     }
 
@@ -1223,7 +1223,7 @@ do
     end
 
     Library.SearchWindow = nil
-    Library.OpenSearch = function(Self)
+    Library.OpenSearch = function(Self, _btn)
         if Library.SearchWindow and Library.SearchWindow.Instance and Library.SearchWindow.Instance.Parent then
             local sw = Library.SearchWindow
             if sw.Instance.Visible then
@@ -1235,11 +1235,19 @@ do
         end
         local Win = Library.MainWindowFrame and Library.MainWindowFrame.Parent
         if not Win then return end
+        local _anchor, _pos
+        if _btn and _btn.AbsolutePosition then
+            _anchor = Vector2.new(0.5, 0)
+            _pos = UDim2.new(0, _btn.AbsolutePosition.X + _btn.AbsoluteSize.X/2, 0, _btn.AbsolutePosition.Y + _btn.AbsoluteSize.Y + 4)
+        else
+            _anchor = Vector2.new(0.5, 0)
+            _pos = UDim2.new(0.5, 0, 0, 12)
+        end
         local Frame = Library:Create("Frame", {
             Name = "\0",
             Parent = Win,
-            AnchorPoint = Vector2.new(0.5, 0),
-            Position = UDim2.new(0.5, 0, 0, 12),
+            AnchorPoint = _anchor,
+            Position = _pos,
             Size = UDim2.new(0, 320, 0, 36),
             BorderSizePixel = 0,
             BackgroundColor3 = Library.Theme["Background"],
@@ -1374,18 +1382,26 @@ do
     end
 
     Library.SettingsWindow = nil
-    Library.OpenSettings = function(Self)
+    Library.OpenSettings = function(Self, _btn)
         if Library.SettingsWindow and Library.SettingsWindow.Instance and Library.SettingsWindow.Instance.Parent then
             Library.SettingsWindow:Toggle()
             return
         end
         local Win = Library.MainWindowFrame and Library.MainWindowFrame.Parent
         if not Win then return end
+        local _anchor, _pos
+        if _btn and _btn.AbsolutePosition then
+            _anchor = Vector2.new(0.5, 0)
+            _pos = UDim2.new(0, _btn.AbsolutePosition.X + _btn.AbsoluteSize.X/2, 0, _btn.AbsolutePosition.Y + _btn.AbsoluteSize.Y + 4)
+        else
+            _anchor = Vector2.new(0.5, 0)
+            _pos = UDim2.new(0.5, 0, 0, 14)
+        end
         local Frame = Library:Create("Frame", {
             Name = "\0",
             Parent = Win,
-            AnchorPoint = Vector2.new(0.5, 0),
-            Position = UDim2.new(0.5, 0, 0, 14),
+            AnchorPoint = _anchor,
+            Position = _pos,
             Size = UDim2.new(0, 260, 0, 110),
             BorderSizePixel = 0,
             BackgroundColor3 = Library.Theme["Background"],
@@ -1749,17 +1765,25 @@ do
     end
 
     Library.ConfigWindow = nil
-    Library.OpenConfig = function(Self)
+    Library.OpenConfig = function(Self, _btn)
         if Library.ConfigWindow and Library.ConfigWindow.Instance and Library.ConfigWindow.Instance.Parent then
             Library.ConfigWindow:Toggle(); return
         end
         local Win = Library.MainWindowFrame and Library.MainWindowFrame.Parent
         if not Win then return end
+        local _anchor, _pos
+        if _btn and _btn.AbsolutePosition then
+            _anchor = Vector2.new(0.5, 0)
+            _pos = UDim2.new(0, _btn.AbsolutePosition.X + _btn.AbsoluteSize.X/2, 0, _btn.AbsolutePosition.Y + _btn.AbsoluteSize.Y + 4)
+        else
+            _anchor = Vector2.new(0.5, 0)
+            _pos = UDim2.new(0.5, 0, 0, 14)
+        end
         local Frame = Library:Create("Frame", {
             Name = "\0",
             Parent = Win,
-            AnchorPoint = Vector2.new(0.5, 0),
-            Position = UDim2.new(0.5, 0, 0, 14),
+            AnchorPoint = _anchor,
+            Position = _pos,
             Size = UDim2.new(0, 280, 0, 240),
             BorderSizePixel = 0,
             BackgroundColor3 = Library.Theme["Background"],
@@ -1855,7 +1879,7 @@ do
         NameBox:AddToTheme({ TextColor3 = "Text" })
         local nbc = Instance.new("UICorner"); nbc.CornerRadius = UDim.new(0, 4); nbc.Parent = NameBox.Instance
         local nbstroke = Instance.new("UIStroke"); nbstroke.Color = Library.Theme["Border"]; nbstroke.Thickness = 1; nbstroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; nbstroke.Parent = NameBox.Instance
-        nbstroke:AddToTheme({ Color = "Border" })
+        table.insert(Library.ThemeMap, { Instance = nbstroke, Property = "Color", ThemeKey = "Border" })
 
         local SaveBtn = Library:Create("TextButton", {
             Name = "\0", Parent = Frame.Instance,
@@ -8241,6 +8265,25 @@ do
                     _mfCorner.Parent = Items["MainFrame"].Instance
                 end
 
+                do
+                    local _topGlow = Library:Create("Frame", {
+                        Name = "\0",
+                        Parent = Items["MainFrame"].Instance,
+                        BackgroundColor3 = Library.Theme["Accent"],
+                        BorderSizePixel = 0,
+                        Position = UDim2.new(0, 0, 0, 0),
+                        Size = UDim2.new(1, 0, 0, 2)
+                    })
+                    _topGlow:AddToTheme({ BackgroundColor3 = "Accent" })
+                    local _topGrad = Instance.new("UIGradient")
+                    _topGrad.Transparency = NumberSequence.new({
+                        NumberSequenceKeypoint.new(0, 0),
+                        NumberSequenceKeypoint.new(0.5, 0),
+                        NumberSequenceKeypoint.new(1, 1)
+                    })
+                    _topGrad.Parent = _topGlow.Instance
+                end
+
                 Library:Create("UIStroke", {
                     Name = "\0",
                     Parent = Items["MainFrame"].Instance,
@@ -8950,9 +8993,28 @@ do
                     BorderSizePixel = 0
                 })
 
-                Library:Create("UIListLayout", {
+                Items["TopBarLeft"] = Library:Create("Frame", {
                     Name = "\0",
                     Parent = Items["TopBar"].Instance,
+                    BackgroundTransparency = 1,
+                    Position = UDim2.new(0, 0, 0, 0),
+                    Size = UDim2.new(0, 80, 1, 0),
+                    BorderSizePixel = 0
+                })
+
+                Items["TopBarRight"] = Library:Create("Frame", {
+                    Name = "\0",
+                    Parent = Items["TopBar"].Instance,
+                    BackgroundTransparency = 1,
+                    AnchorPoint = Vector2.new(1, 0),
+                    Position = UDim2.new(1, 0, 0, 0),
+                    Size = UDim2.new(0, 100, 1, 0),
+                    BorderSizePixel = 0
+                })
+
+                Library:Create("UIListLayout", {
+                    Name = "\0",
+                    Parent = Items["TopBarRight"].Instance,
                     FillDirection = Enum.FillDirection.Horizontal,
                     HorizontalAlignment = Enum.HorizontalAlignment.Right,
                     VerticalAlignment = Enum.VerticalAlignment.Center,
@@ -8964,12 +9026,12 @@ do
                     local function makeIconBtn(asset, name, onClick)
                         local b = Library:Create("ImageButton", {
                             Name = "\0",
-                            Parent = Items["TopBar"].Instance,
+                            Parent = Items["TopBarRight"].Instance,
                             Image = asset,
                             ImageColor3 = Library.Theme["Inactive Text"],
                             BackgroundTransparency = 1,
                             AutoButtonColor = false,
-                            Size = UDim2.new(0, 20, 0, 20),
+                            Size = UDim2.new(0, 22, 0, 22),
                             BorderSizePixel = 0
                         })
                         b:AddToTheme({ ImageColor3 = "Inactive Text" })
@@ -8978,7 +9040,9 @@ do
                         end, function()
                             b:Tween({ ImageColor3 = Library.Theme["Inactive Text"] })
                         end)
-                        Library:Connect(b.Instance.MouseButton1Click, onClick)
+                        Library:Connect(b.Instance.MouseButton1Click, function()
+                            onClick(b.Instance)
+                        end)
                         return b
                     end
 
@@ -9043,10 +9107,10 @@ do
                         return wrap
                     end
 
-                    Page.Items["SaveBtn"]     = makeSaveBtn(Items["TopBar"].Instance)
-                    Page.Items["SearchBtn"]   = makeIconBtn("rbxassetid://15999597350",  "search",   function() pcall(function() Library:OpenSearch() end) end)
-                    Page.Items["ConfigBtn"]   = makeIconBtn("rbxassetid://87350324375899", "config",   function() pcall(function() Library:OpenConfig() end) end)
-                    Page.Items["SettingsBtn"] = makeIconBtn("rbxassetid://129261498595427", "settings", function() pcall(function() Library:OpenSettings() end) end)
+                    Page.Items["SaveBtn"]     = makeSaveBtn(Items["TopBarLeft"].Instance)
+                    Page.Items["SearchBtn"]   = makeIconBtn("rbxassetid://15999597350",  "search",   function(btn) pcall(function() Library:OpenSearch(btn) end) end)
+                    Page.Items["ConfigBtn"]   = makeIconBtn("rbxassetid://87350324375899", "config",   function(btn) pcall(function() Library:OpenConfig(btn) end) end)
+                    Page.Items["SettingsBtn"] = makeIconBtn("rbxassetid://129261498595427", "settings", function(btn) pcall(function() Library:OpenSettings(btn) end) end)
                 end
 
                 Page.Items = Items
